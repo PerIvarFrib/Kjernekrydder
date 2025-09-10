@@ -1,90 +1,156 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kjernekrydder</title>
-    <meta name="description" content="Kjernekrydder – unike krydderblandinger for ekte matglede.">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #faf7f2;
-            color: #333;
-        }
-        header {
-            background-color: #8b4513;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
-        nav a {
-            color: white;
-            margin: 0 1rem;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        main {
-            padding: 2rem;
-            max-width: 800px;
-            margin: auto;
-        }
-        footer {
-            background-color: #8b4513;
-            color: white;
-            text-align: center;
-            padding: 1rem;
-            margin-top: 2rem;
-        }
-        .cta-button {
-            display: inline-block;
-            background-color: #d2691e;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 1rem;
-        }
-        .cta-button:hover {
-            background-color: #a0522d;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kjernekrydder</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <a class="logo" href="#hero" aria-label="Gå til toppen - Hjem">
+      <img src="media/logo.png" alt="Kjernekrydder logo" style="height: 80px; vertical-align: middle;">
+    </a>
+    <nav class="nav">
+      <a href="#recipes">Oppskrifter</a>
+      <a href="#" id="contact-btn">Kontakt</a>
+    </nav>
+    <!-- Order button (visible in header) -->
+    <button class="order-btn" id="buy-btn" aria-label="Bestill Kjernekrydder">
+      <span class="order-icon">🛒</span>
+      <span class="order-text">Bestill</span>
+    </button>
+    <div class="hamburger" id="hamburger-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+    <!-- HERO -->
+    <section id="hero" class="hero">
+    <video autoplay muted loop playsinline class="hero-video">
+        <source src="media/krydderfall.mp4" type="video/mp4">
+        Din nettleser støtter ikke video.
+    </video>
+    <div class="overlay"></div>
+
+    <!-- Flytende krydder -->
+    <!-- <div class="floating-spices">
+        <img src="media/kanel.jpg" alt="Kanelstang" class="spice kanel">
+        <img src="media/kardemomme.jpg" alt="Kardemomme" class="spice kardemomme">
+        <img src="media/pepper.jpg" alt="Svart pepper" class="spice pepper">
+        <img src="media/pepper.jpg" alt="Svart pepper" class="spice pepper">
+        <img src="media/pepper.jpg" alt="Svart pepper" class="spice pepper">
+        <img src="media/nellik.jpg" alt="Nellik" class="spice nellik">
+        <img src="media/nellik.jpg" alt="Nellik" class="spice nellik">
+        <img src="media/nellik.jpg" alt="Nellik" class="spice nellik">
+        <img src="media/sichuan.jpg" alt="Sichuan pepper" class="spice sichuan">
+        <img src="media/sichuan.jpg" alt="Sichuan pepper" class="spice sichuan">
+        <img src="media/sichuan.jpg" alt="Sichuan pepper" class="spice sichuan">
+    </div> -->
+
+    <div class="hero-content">
         <h1>Kjernekrydder</h1>
-        <nav>
-            <a href="#produkter">Produkter</a>
-            <a href="#om-oss">Om oss</a>
-            <a href="#kontakt">Kontakt</a>
-        </nav>
-    </header>
+        <p class="subtitle">En varm krydderblanding,<br>
+            perfekt til gryteretter,<br>
+            med lukten av jul.</p>
+        <div class="ingredients">
+        <div class="ingredient">Kanel</div>
+        <div class="ingredient">Pepper</div>
+        <div class="ingredient">Svart kardemomme</div>
+        <div class="ingredient">Nellik</div>
+        </div>
+        <button class="cta" id="buy-btn-hero">Bestill nå</button>
+    </div>
+    </section>
 
-    <main>
-        <section id="intro">
-            <h2>Velkommen til Kjernekrydder</h2>
-            <p>Vi lager håndlagde krydderblandinger med fokus på smak, kvalitet og rene råvarer.</p>
-            <a href="#produkter" class="cta-button">Se våre produkter</a>
-        </section>
+  <!-- RECIPE SECTION -->
+  <section id="recipes" class="recipes">
+    <h2>Oppskrifter med Kjernekrydder</h2>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <img src="https://www.matprat.no/globalassets/recipe-images/placeholder1.jpg" alt="Oppskrift 1">
+        <h3>Krydret Lammegryte</h3>
+        <a href="https://www.matprat.no/oppskrift1" target="_blank">Se oppskrift på Matprat</a>
+      </div>
+      <div class="recipe-card">
+        <img src="https://www.matprat.no/globalassets/recipe-images/placeholder2.jpg" alt="Oppskrift 2">
+        <h3>Varmende Grønnsakssuppe</h3>
+        <a href="https://www.matprat.no/oppskrift2" target="_blank">Se oppskrift på Matprat</a>
+      </div>
+      <div class="recipe-card">
+        <img src="https://www.matprat.no/globalassets/recipe-images/placeholder3.jpg" alt="Oppskrift 3">
+        <h3>Indisk Kyllinggryte</h3>
+        <a href="https://www.matprat.no/oppskrift3" target="_blank">Se oppskrift på Matprat</a>
+      </div>
+    </div>
+  </section>
 
-        <section id="produkter">
-            <h2>Våre produkter</h2>
-            <p>Her kan du legge inn bilder og beskrivelser av krydderblandingene dine.</p>
-        </section>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>&copy; 2025 Kjernekrydder. Alle rettigheter reservert.</p>
+    <div class="socials">
+      <a href="#">Instagram</a> | <a href="#">Facebook</a>
+    </div>
+  </footer>
 
-        <section id="om-oss">
-            <h2>Om oss</h2>
-            <p>Kjernekrydder er et norsk merke dedikert til å gi deg den beste smaksopplevelsen.</p>
-        </section>
+  <!-- PRODUCT POPUP -->
+  <div class="modal" id="product-modal">
+    <div class="modal-content">
+      <span class="close" id="close-product">&times;</span>
+      <img src="media/kjernekrydder.jpg" alt="Kjernekrydder produkt">
+      <h2>Kjernekrydder 100g</h2>
+      <p>En unik blanding av kanel, pepper, svart kardemomme og nellik. Perfekt til både kjøtt, grønnsaker og søtmat.</p>
+      <p class="price">99 kr</p>
+      <div class="quantity">
+        <button class="qty-btn" id="decrease">-</button>
+        <span id="qty">1</span>
+        <button class="qty-btn" id="increase">+</button>
+      </div>
+      <p class="total">Total: <span id="total">99 kr</span></p>
+      <button class="vipps-btn">Betal med Vipps</button>
+    </div>
+  </div>
 
-        <section id="kontakt">
-            <h2>Kontakt oss</h2>
-            <p>Send oss en e‑post på <a href="mailto:post@kjernekrydder.no">post@kjernekrydder.no</a></p>
-        </section>
-    </main>
+  <!-- CONTACT POPUP -->
+  <div class="modal" id="contact-modal">
+    <div class="modal-content">
+      <span class="close" id="close-contact">&times;</span>
+      <h2>Kontakt oss</h2>
+      <form>
+        <label for="name">Navn:</label>
+        <input type="text" id="name" required>
+        
+        <label for="email">E-post:</label>
+        <input type="email" id="email" required>
+        
+        <label for="message">Melding:</label>
+        <textarea id="message" rows="4" required></textarea>
+        
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
 
-    <footer>
-        <p>&copy; 2025 Kjernekrydder. Alle rettigheter reservert.</p>
-    </footer>
+  <script src="script.js"></script>
+  <script>
+    // Sticky header: hide on scroll down, show on scroll up
+    let lastScrollY = window.scrollY;
+    const headerScroll = document.querySelector('.site-header');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > lastScrollY) {
+        // Scrolling down
+        headerScroll.style.transform = 'translateY(-100%)';
+      } else {
+        // Scrolling up
+        headerScroll.style.transform = 'translateY(0)';
+      }
+      lastScrollY = window.scrollY;
+    });
+  </script>
 </body>
 </html>
