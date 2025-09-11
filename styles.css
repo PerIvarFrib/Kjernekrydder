@@ -7,7 +7,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Georgia', serif;
+  /* Use a clean, highly-readable system sans-serif stack. On Windows this prefers Segoe UI; fallbacks include Inter/Roboto/Helvetica/Arial. */
+  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -64,9 +67,7 @@ body {
   margin-left: 1rem;
 }
 .order-btn .order-icon { font-size: 1.1rem; }
-.order-btn .order-text { font-size: 0.95rem; }
-.order-btn:focus { outline: 3px solid rgba(255,123,63,0.25); }
-
+/* background: #CD440D;  Header order button color */
 
 .nav {
   display: flex;

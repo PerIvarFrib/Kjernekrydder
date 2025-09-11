@@ -71,6 +71,48 @@ window.addEventListener("DOMContentLoaded", () => {
     spice.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
     spice.style.animationDelay = `${delay}s`;
   });
+
+  // HERO VIDEO: skip first 5s and trim last 5s by looping between [5, duration-5]
+  const heroVideo = document.querySelector('.hero-video');
+  if (heroVideo) {
+    // Ensure video metadata is loaded to read duration
+    function setupTrim() {
+      const bufferStart = 0; // seconds to skip at start
+      const bufferEnd = 0; // seconds to trim from end
+
+      // If duration is unknown or too short, don't modify playback
+      const dur = heroVideo.duration;
+      if (!dur || isNaN(dur) || dur <= bufferStart + bufferEnd + 0.5) return;
+
+      const loopStart = bufferStart;
+      const loopEnd = Math.max(0, dur - bufferEnd);
+
+      // If current time is before loopStart, jump to loopStart
+      if (heroVideo.currentTime < loopStart) heroVideo.currentTime = loopStart + 0.05;
+
+      // On timeupdate, if we hit or pass loopEnd, jump back to loopStart
+      const onTime = () => {
+        if (heroVideo.currentTime >= loopEnd) {
+          // small offset to avoid stuck on exact boundary
+          heroVideo.currentTime = loopStart + 0.05;
+          heroVideo.play();
+        }
+      };
+
+      heroVideo.addEventListener('timeupdate', onTime);
+
+      // Small safety: if seeking is blocked initially, try once on canplay
+      heroVideo.addEventListener('canplay', () => {
+        if (heroVideo.currentTime < loopStart) heroVideo.currentTime = loopStart + 0.05;
+      }, { once: true });
+    }
+
+    if (heroVideo.readyState >= 1) {
+      setupTrim();
+    } else {
+      heroVideo.addEventListener('loadedmetadata', setupTrim, { once: true });
+    }
+  }
 });
 
 
