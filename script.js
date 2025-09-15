@@ -33,22 +33,24 @@ let quantity = 1;
 const unitPrice = 99; // pris per enhet i kr
 
 function updateTotal() {
-  totalEl.textContent = `${quantity * unitPrice} kr`;
+  if (totalEl) totalEl.textContent = `${quantity * unitPrice} kr`;
 }
 
-decreaseBtn.addEventListener("click", () => {
-  if (quantity > 1) {
-    quantity--;
+if (decreaseBtn && increaseBtn && qtyEl && totalEl) {
+  decreaseBtn.addEventListener("click", () => {
+    if (quantity > 1) {
+      quantity--;
+      qtyEl.textContent = quantity;
+      updateTotal();
+    }
+  });
+
+  increaseBtn.addEventListener("click", () => {
+    quantity++;
     qtyEl.textContent = quantity;
     updateTotal();
-  }
-});
-
-increaseBtn.addEventListener("click", () => {
-  quantity++;
-  qtyEl.textContent = quantity;
-  updateTotal();
-});
+  });
+}
 
 // ---------- VIPPS BETALINGSKNAPP ----------
 const vippsBtn = document.querySelector(".vipps-btn");
@@ -61,88 +63,69 @@ vippsBtn.addEventListener("click", () => {
 // ---------- HERO ANIMASJON ----------
 // Legg til i script.js, etter DOMContentLoaded
 window.addEventListener("DOMContentLoaded", () => {
-  const spices = document.querySelectorAll(".spice");
-  spices.forEach(spice => {
-    const angle = Math.random() * 360; // retning
-    const distance = 150 + Math.random() * 200; // hvor langt det flytter seg
-    const delay = Math.random() * 10; // forsinkelse
+  // Lazy init for spice elements only when hero is in view
+  function initSpices() {
+    const spices = document.querySelectorAll(".spice");
+    spices.forEach(spice => {
+      const angle = Math.random() * 360; // retning
+      const distance = 150 + Math.random() * 200; // hvor langt det flytter seg
+      const delay = Math.random() * 10; // forsinkelse
+      spice.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+      spice.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
+      spice.style.animationDelay = `${delay}s`;
+    });
+  }
 
-    spice.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
-    spice.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
-    spice.style.animationDelay = `${delay}s`;
-  });
-
-  // HERO VIDEO: skip first 5s and trim last 5s by looping between [5, duration-5]
-  const heroVideo = document.querySelector('.hero-video');
-  if (heroVideo) {
-    // Ensure video metadata is loaded to read duration
-    function setupTrim() {
-      const bufferStart = 0; // seconds to skip at start
-      const bufferEnd = 0; // seconds to trim from end
-
-      // If duration is unknown or too short, don't modify playback
-      const dur = heroVideo.duration;
-      if (!dur || isNaN(dur) || dur <= bufferStart + bufferEnd + 0.5) return;
-
-      const loopStart = bufferStart;
-      const loopEnd = Math.max(0, dur - bufferEnd);
-
-      // If current time is before loopStart, jump to loopStart
-      if (heroVideo.currentTime < loopStart) heroVideo.currentTime = loopStart + 0.05;
-
-      // On timeupdate, if we hit or pass loopEnd, jump back to loopStart
-      const onTime = () => {
-        if (heroVideo.currentTime >= loopEnd) {
-          // small offset to avoid stuck on exact boundary
-          heroVideo.currentTime = loopStart + 0.05;
-          heroVideo.play();
+  const heroSection = document.getElementById('hero');
+  if (heroSection && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          initSpices();
+          obs.disconnect();
         }
-      };
+      });
+    }, { root: document.querySelector('.scroll-container') || null, threshold: 0.25 });
+    observer.observe(heroSection);
+  } else {
+    // fallback
+    initSpices();
+  }
 
-      heroVideo.addEventListener('timeupdate', onTime);
-
-      // Small safety: if seeking is blocked initially, try once on canplay
-      heroVideo.addEventListener('canplay', () => {
-        if (heroVideo.currentTime < loopStart) heroVideo.currentTime = loopStart + 0.05;
-      }, { once: true });
+  // HERO VIDEO (currently background video): prefer respecting reduced motion
+  const bgVideo = document.querySelector('.background-video');
+  if (bgVideo && bgVideo.tagName === 'VIDEO') {
+    // Pause video if user prefers reduced motion
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (prefersReduced.matches) {
+      bgVideo.pause();
+      bgVideo.removeAttribute('autoplay');
     }
-
-    if (heroVideo.readyState >= 1) {
-      setupTrim();
-    } else {
-      heroVideo.addEventListener('loadedmetadata', setupTrim, { once: true });
-    }
+    prefersReduced.addEventListener('change', (e) => {
+      if (e.matches) {
+        bgVideo.pause();
+      } else {
+        bgVideo.play().catch(()=>{});
+      }
+    });
   }
 });
 
 
-// ---------- CONTACT POPUP ----------
-const contactBtn = document.getElementById("contact-btn");
-const contactModal = document.getElementById("contact-modal");
-const closeContact = document.getElementById("close-contact");
-
-contactBtn.addEventListener("click", () => {
-  contactModal.style.display = "flex";
-});
-
-closeContact.addEventListener("click", () => {
-  contactModal.style.display = "none";
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target === contactModal) {
-    contactModal.style.display = "none";
-  }
-});
+// Kontakt-modal fjernet – produktmodal beholdes uendret.
 
 // ---------- SMOOTH SCROLL ----------
+// ---------- SMOOTH SCROLL (ignore dead anchors) ----------
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener("click", function(e) {
+    const href = this.getAttribute('href');
+    if (!href || href === '#') return; // ignore placeholder
+    // Contact link handled by modal open
+  // Kontakt lenke peker nå til footer (#footer) og håndteres som vanlig scroll.
+    const target = document.querySelector(href);
+    if (!target) return;
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute("href"));
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-    }
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
 
@@ -169,8 +152,11 @@ function updateHamburgerMenu() {
     const logoRect = logo.getBoundingClientRect();
     logoWidth = logoRect.width;
   }
-  // 40px buffer for hamburger
-  const availableWidth = headerRect.width - logoWidth - 40;
+  // Include order button width + buffer
+  const orderBtn = header.querySelector('.order-btn');
+  const orderWidth = orderBtn ? orderBtn.getBoundingClientRect().width : 0;
+  const buffer = 60; // space for hamburger
+  const availableWidth = headerRect.width - logoWidth - orderWidth - buffer;
   if (navRect.width > availableWidth) {
     nav.classList.add("hide");
     hamburger.classList.add("show");
@@ -182,7 +168,8 @@ function updateHamburgerMenu() {
 }
 
 window.addEventListener('DOMContentLoaded', updateHamburgerMenu);
-window.addEventListener('resize', updateHamburgerMenu);
+function debounce(fn, delay=120){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), delay); }; }
+window.addEventListener('resize', debounce(updateHamburgerMenu,150));
 
 if (hamburger && nav) {
   hamburger.addEventListener("click", () => {
@@ -195,36 +182,59 @@ if (hamburger && nav) {
   });
 }
 
-// Update CSS variable for header height so CSS can use it
-function setHeaderHeightVar() {
+// call this on load and on resize to keep --header-height accurate
+function updateHeaderHeightVar() {
+  const header = document.querySelector('.site-header');
   if (!header) return;
-  const h = Math.round(header.getBoundingClientRect().height);
-  document.documentElement.style.setProperty('--header-height', h + 'px');
+  const h = header.offsetHeight;
+  document.documentElement.style.setProperty('--header-height', `${h}px`);
 }
 
-// debounce helper
-function debounce(fn, wait = 100) {
-  let t;
-  return function(...args) {
-    clearTimeout(t);
-    t = setTimeout(() => fn.apply(this, args), wait);
-  };
+// run on load and resize, and observe header changes
+window.addEventListener('DOMContentLoaded', updateHeaderHeightVar);
+window.addEventListener('resize', debounce(updateHeaderHeightVar,150));
+if ('ResizeObserver' in window) {
+  const header = document.querySelector('.site-header');
+  if (header) {
+    new ResizeObserver(updateHeaderHeightVar).observe(header);
+  }
 }
 
-const recalibrate = debounce(() => {
-  setHeaderHeightVar();
-  updateHamburgerMenu();
-}, 120);
+// ---------- KJØP KNAPP MED FOKUSOUTLINE ----------
+// For bedre tilgjengelighet: fjern fokusring fra knapper etter klikk
+document.querySelectorAll('.qty-btn').forEach(btn => {
+  btn.addEventListener('mouseup', e => {
+    btn.blur();
+  });
+});
 
-// run initially
-setHeaderHeightVar();
-updateHamburgerMenu();
+// Overlay: go from A -> B and stay at B once user leaves the first (intro) panel.
+// Replace previous per-frame fractional overlay logic with a simple threshold-based toggle.
+(function () {
+  const container = document.querySelector('.scroll-container');
+  const overlay = document.querySelector('.page-gradient-overlay');
+  if (!container || !overlay) return;
 
-// Observe size changes to header (e.g., when font changes, logo loads)
-if (window.ResizeObserver && header) {
-  const ro = new ResizeObserver(recalibrate);
-  ro.observe(header);
-}
+  let raf = null;
+  const THRESHOLD = 0.5; // fraction of viewport scrolled before overlay "sticks" to peak
 
-window.addEventListener('load', recalibrate);
-window.addEventListener('orientationchange', recalibrate);
+  function updateOverlay() {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const vh = container.clientHeight || window.innerHeight;
+      const st = container.scrollTop;
+      // If we've scrolled past the threshold (i.e. left the intro page), set overlay to peak and keep it
+      if (st >= vh * THRESHOLD) {
+        overlay.style.setProperty('--page-overlay', '1');
+      } else {
+        overlay.style.setProperty('--page-overlay', '0');
+      }
+    });
+  }
+
+  // initial state
+  updateOverlay();
+
+  container.addEventListener('scroll', updateOverlay, { passive: true });
+  window.addEventListener('resize', debounce(updateOverlay,150));
+})();

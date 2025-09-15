@@ -6,20 +6,33 @@
   <title>Kjernekrydder</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
 
+<body>
+  <video class="background-video" autoplay muted playsinline preload="metadata" poster="media/kjernekrydder.jpg">
+    <source src="media/krydderfall-web.mp4" type="video/mp4">
+    Din nettleser støtter ikke video.
+  </video>
+
+  <div class="page-gradient-overlay" aria-hidden="true"></div>
   <!-- HEADER -->
   <header class="site-header">
     <a class="logo" href="#hero" aria-label="Gå til toppen - Hjem">
-      <img src="media/logo.png" alt="Kjernekrydder logo" style="height: 80px; vertical-align: middle;">
+      <img src="media/logo.png" alt="Kjernekrydder logo" fetchpriority="high" decoding="sync">
     </a>
-    <nav class="nav">
-      <a href="#recipes">Oppskrifter</a>
-      <a href="#" id="contact-btn">Kontakt</a>
+    <nav class="nav" aria-label="Hovedmeny">
+      <a href="#recipes" class="nav-link">Oppskrifter</a>
+      <a href="#footer" class="nav-link" id="contact-btn">Kontakt</a>
     </nav>
     <!-- Order button (visible in header) -->
     <button class="order-btn" id="buy-btn" aria-label="Bestill Kjernekrydder">
-      <span class="order-icon">🛒</span>
+      <span class="order-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 23 18" stroke="currentColor" aria-hidden="true">
+          <g stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 10h18l-2 7a2 2 0 0 1-2 1H7a2 2 0 0 1-2-1l-2-7z"/>
+            <path d="M8 10V6a4 4 0 1 1 8 0v4"/>
+          </g>
+        </svg>
+      </span>
       <span class="order-text">Bestill</span>
     </button>
     <div class="hamburger" id="hamburger-menu">
@@ -29,128 +42,70 @@
     </div>
   </header>
 
+  <main class="scroll-container">
+    <section class="panel intro" aria-hidden="true"></section>
     <!-- HERO -->
-    <section id="hero" class="hero">
-  <video autoplay muted playsinline preload="auto" class="hero-video">
-        <source src="media/krydderfall-web.mp4" type="video/mp4">
-        Din nettleser støtter ikke video.
-    </video>
-    <div class="overlay"></div>
-
-    <!-- Flytende krydder -->
-    <!-- <div class="floating-spices">
-        <img src="media/kanel.jpg" alt="Kanelstang" class="spice kanel">
-        <img src="media/kardemomme.jpg" alt="Kardemomme" class="spice kardemomme">
-        <img src="media/pepper.jpg" alt="Svart pepper" class="spice pepper">
-        <img src="media/pepper.jpg" alt="Svart pepper" class="spice pepper">
-        <img src="media/pepper.jpg" alt="Svart pepper" class="spice pepper">
-        <img src="media/nellik.jpg" alt="Nellik" class="spice nellik">
-        <img src="media/nellik.jpg" alt="Nellik" class="spice nellik">
-        <img src="media/nellik.jpg" alt="Nellik" class="spice nellik">
-        <img src="media/sichuan.jpg" alt="Sichuan pepper" class="spice sichuan">
-        <img src="media/sichuan.jpg" alt="Sichuan pepper" class="spice sichuan">
-        <img src="media/sichuan.jpg" alt="Sichuan pepper" class="spice sichuan">
-    </div> -->
-
-    <div class="hero-content">
+    <section id="hero" class="panel hero">
+      <div class="hero-content">
         <h1>Kjernekrydder</h1>
-        <p class="subtitle">En varm krydderblanding,<br>
-            perfekt til gryteretter,<br>
-            med lukten av jul.</p>
-        <div class="ingredients">
-        <div class="ingredient">Kanel</div>
-        <div class="ingredient">Pepper</div>
-        <div class="ingredient">Svart kardemomme</div>
-        <div class="ingredient">Nellik</div>
-        </div>
-        <button class="cta" id="buy-btn-hero">Bestill nå</button>
-    </div>
+        <p class="subtitle">En varm og aromatisk krydderblanding, utsøkt til indiske retter.</p>
+        <!-- <p class="subtitle">Ingredienser: kanel, nellik, svart pepper, svart kardemomme og rød sichuan pepper.</p> -->
+        <button class="cta" id="buy-btn-hero">Se produkt</button>
+      </div> 
     </section>
 
-  <!-- RECIPE SECTION -->
-  <section id="recipes" class="recipes">
-    <h2>Oppskrifter med Kjernekrydder</h2>
-    <div class="recipe-grid">
-      <div class="recipe-card">
-        <img src="https://www.matprat.no/globalassets/recipe-images/placeholder1.jpg" alt="Oppskrift 1">
-        <h3>Krydret Lammegryte</h3>
-        <a href="https://www.matprat.no/oppskrift1" target="_blank">Se oppskrift på Matprat</a>
-      </div>
-      <div class="recipe-card">
-        <img src="https://www.matprat.no/globalassets/recipe-images/placeholder2.jpg" alt="Oppskrift 2">
-        <h3>Varmende Grønnsakssuppe</h3>
-        <a href="https://www.matprat.no/oppskrift2" target="_blank">Se oppskrift på Matprat</a>
-      </div>
-      <div class="recipe-card">
-        <img src="https://www.matprat.no/globalassets/recipe-images/placeholder3.jpg" alt="Oppskrift 3">
-        <h3>Indisk Kyllinggryte</h3>
-        <a href="https://www.matprat.no/oppskrift3" target="_blank">Se oppskrift på Matprat</a>
-      </div>
-    </div>
-  </section>
+    <section class="panel recipes" id="recipes" aria-labelledby="recipes-heading">
+      <h2 id="recipes-heading">Oppskrifter</h2>
+      <!-- <p>Her er noen deilige oppskrifter med Kjernekrydder:</p>
+      <ul>
+        <li><a href="#recipe1">Indisk Kylling Curry</a></li>
+        <li><a href="#recipe2">Krydret Grønnsakssuppe</a></li>
+        <li><a href="#recipe3">Kylling Tikka Masala</a></li>
+      </ul> -->
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <p>&copy; 2025 Kjernekrydder. Alle rettigheter reservert.</p>
-    <div class="socials">
-      <a href="#">Instagram</a> | <a href="#">Facebook</a>
-    </div>
-  </footer>
+      <!-- FOOTER -->
+            <footer class="site-footer" id="footer" role="contentinfo" aria-labelledby="footer-heading">
+              <div class="footer-inner">
+                <h2 id="footer-heading" class="visually-hidden">Kontaktinformasjon</h2>
+                <p class="org-name">OP FRIBORG / 930691186</p>
+                <p>Karolinerveien 10A, 7021 Trondheim</p>
+                <p><a href="mailto:post@kjernekrydder.no">post@kjernekrydder.no</a> • <a href="tel:+4746968902">469 68 902</a></p>
+                <!-- <div class="socials">
+                  <a href="#" aria-label="Instagram">Instagram</a> | <a href="#" aria-label="Facebook">Facebook</a>
+                </div> -->
+                <p class="copyright">&copy; 2025 Kjernekrydder. Alle rettigheter reservert.</p>
+              </div>
+            </footer>
+    
+    </section>
+    <!-- other panels if needed -->
+  </main>
+
 
   <!-- PRODUCT POPUP -->
   <div class="modal" id="product-modal">
     <div class="modal-content">
       <span class="close" id="close-product">&times;</span>
-      <img src="media/kjernekrydder.jpg" alt="Kjernekrydder produkt">
+  <img src="media/kjernekrydder.jpg" alt="Kjernekrydder produkt" loading="lazy" decoding="async">
       <h2>Kjernekrydder 100g</h2>
-      <p>En unik blanding av kanel, pepper, svart kardemomme og nellik. Perfekt til både kjøtt, grønnsaker og søtmat.</p>
-      <p class="price">99 kr</p>
-      <div class="quantity">
+      <p id="produktbeskrivelse">Varm og aromatisk krydderblanding utsøkt til indiske retter.<br>
+        <br>Ingredienser: kanel, nellik, svart pepper,
+        svart kardemomme og rød sichuan pepper.
+        </p>
+      <div class="price">kr 149</div>
+      <!-- <div class="quantity">
         <button class="qty-btn" id="decrease">-</button>
         <span id="qty">1</span>
         <button class="qty-btn" id="increase">+</button>
-      </div>
-      <p class="total">Total: <span id="total">99 kr</span></p>
+      </div> -->
+      <!-- <p class="total">Total: <span id="total">99 kr</span></p> -->
+      <div class="price-note">Inkl. fraktkostnader (kr 53)</div>
       <button class="vipps-btn">Betal med Vipps</button>
     </div>
   </div>
 
-  <!-- CONTACT POPUP -->
-  <div class="modal" id="contact-modal">
-    <div class="modal-content">
-      <span class="close" id="close-contact">&times;</span>
-      <h2>Kontakt oss</h2>
-      <form>
-        <label for="name">Navn:</label>
-        <input type="text" id="name" required>
-        
-        <label for="email">E-post:</label>
-        <input type="email" id="email" required>
-        
-        <label for="message">Melding:</label>
-        <textarea id="message" rows="4" required></textarea>
-        
-        <button type="submit">Send</button>
-      </form>
-    </div>
-  </div>
+  <!-- Kontakt modal fjernet iht ønske om at Kontakt lenke skal scrolle til footer. -->
 
   <script src="script.js"></script>
-  <script>
-    // Sticky header: hide on scroll down, show on scroll up
-    let lastScrollY = window.scrollY;
-    const headerScroll = document.querySelector('.site-header');
-
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > lastScrollY) {
-        // Scrolling down
-        headerScroll.style.transform = 'translateY(-100%)';
-      } else {
-        // Scrolling up
-        headerScroll.style.transform = 'translateY(0)';
-      }
-      lastScrollY = window.scrollY;
-    });
-  </script>
 </body>
 </html>
