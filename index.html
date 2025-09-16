@@ -17,16 +17,16 @@
   <!-- HEADER -->
   <header class="site-header">
     <a class="logo" href="#hero" aria-label="Gå til toppen - Hjem">
-      <img src="media/logo.png" alt="Kjernekrydder logo" fetchpriority="high" decoding="sync">
+      <img src="media/logo.webp" alt="Kjernekrydder logo" width="320" height="80" fetchpriority="high" decoding="sync">
     </a>
     <nav class="nav" aria-label="Hovedmeny">
-      <a href="#recipes" class="nav-link">Oppskrifter</a>
-      <a href="#footer" class="nav-link" id="contact-btn">Kontakt</a>
+      <a href="#recipes" class="nav-link text-ui">Oppskrifter</a>
+      <a href="#footer" class="nav-link text-ui" id="contact-btn">Kontakt</a>
     </nav>
     <!-- Order button (visible in header) -->
     <button class="order-btn" id="buy-btn" aria-label="Bestill Kjernekrydder">
       <span class="order-icon" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 23 18" stroke="currentColor" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 16" stroke="currentColor" aria-hidden="true">
           <g stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 10h18l-2 7a2 2 0 0 1-2 1H7a2 2 0 0 1-2-1l-2-7z"/>
             <path d="M8 10V6a4 4 0 1 1 8 0v4"/>
@@ -47,10 +47,10 @@
     <!-- HERO -->
     <section id="hero" class="panel hero">
       <div class="hero-content">
-        <h1>Kjernekrydder</h1>
-        <p class="subtitle">En varm og aromatisk krydderblanding, utsøkt til indiske retter.</p>
+        <!-- <h1 class="text-display">Kjernekrydder</h1> -->
+  <p class="subtitle text-lead hero-subtitle">En varm og aromatisk krydderblanding, utsøkt til indiske retter.</p>
         <!-- <p class="subtitle">Ingredienser: kanel, nellik, svart pepper, svart kardemomme og rød sichuan pepper.</p> -->
-        <button class="cta" id="buy-btn-hero">Se produkt</button>
+        <button class="cta text-ui" id="buy-btn-hero">Se produkt</button>
       </div> 
     </section>
 
@@ -83,12 +83,15 @@
 
 
   <!-- PRODUCT POPUP -->
-  <div class="modal" id="product-modal">
+  <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-title" hidden>
     <div class="modal-content">
       <span class="close" id="close-product">&times;</span>
-  <img src="media/kjernekrydder.jpg" alt="Kjernekrydder produkt" loading="lazy" decoding="async">
-      <h2>Kjernekrydder 100g</h2>
-      <p id="produktbeskrivelse">Varm og aromatisk krydderblanding utsøkt til indiske retter.<br>
+      <picture>
+        <source srcset="media/kjernekrydder.webp" type="image/webp">
+        <img src="media/kjernekrydder.jpg" alt="Kjernekrydder produkt" loading="eager" decoding="async">
+      </picture>
+  <h2 class="product-title" id="product-title">Kjernekrydder 60g</h2>
+      <p id="produktbeskrivelse" class="text-body">Varm og aromatisk krydderblanding utsøkt til indiske retter.<br>
         <br>Ingredienser: kanel, nellik, svart pepper,
         svart kardemomme og rød sichuan pepper.
         </p>
@@ -100,7 +103,7 @@
       </div> -->
       <!-- <p class="total">Total: <span id="total">99 kr</span></p> -->
       <div class="price-note">Inkl. fraktkostnader (kr 53)</div>
-      <button class="vipps-btn">Betal med Vipps</button>
+      <button class="vipps-btn text-ui"><img src="media/Vipps_logo.svg" alt="Vipps"> Betal med Vipps</button>
     </div>
   </div>
 

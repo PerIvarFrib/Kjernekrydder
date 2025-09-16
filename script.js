@@ -5,21 +5,25 @@ const buyBtns = document.querySelectorAll("#buy-btn, #buy-btn-hero");
 const productModal = document.getElementById("product-modal");
 const closeProduct = document.getElementById("close-product");
 
-buyBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    productModal.style.display = "flex";
-  });
-});
+function openModal(){
+  if(!productModal) return;
+  productModal.removeAttribute('hidden');
+  productModal.style.display = 'flex';
+  // Focus trap entry point (could be expanded later)
+  const title = productModal.querySelector('#product-title');
+  if(title) title.focus?.();
+}
+function closeModal(){
+  if(!productModal) return;
+  productModal.style.display = 'none';
+  productModal.setAttribute('hidden','');
+}
 
-closeProduct.addEventListener("click", () => {
-  productModal.style.display = "none";
-});
+buyBtns.forEach(btn => btn.addEventListener('click', openModal));
+if (closeProduct) closeProduct.addEventListener('click', closeModal);
 
-// Klikk utenfor popup for å lukke
-window.addEventListener("click", (e) => {
-  if (e.target === productModal) {
-    productModal.style.display = "none";
-  }
+window.addEventListener('click', e => {
+  if (e.target === productModal) closeModal();
 });
 
 
@@ -53,12 +57,31 @@ if (decreaseBtn && increaseBtn && qtyEl && totalEl) {
 }
 
 // ---------- VIPPS BETALINGSKNAPP ----------
-const vippsBtn = document.querySelector(".vipps-btn");
+const vippsBtn = document.querySelector('.vipps-btn');
+if (vippsBtn) {
+  vippsBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const container = vippsBtn.closest('.modal-content') || vippsBtn.parentElement;
+    if (!container) return;
+    // Avoid duplicating the message if user clicks multiple times
+    if (container.querySelector('.vipps-info')) return;
 
-vippsBtn.addEventListener("click", () => {
-  // Her kobles Vipps API inn når det er klart
-  alert(`Vipps-betaling på ${quantity * unitPrice} kr kommer snart!`);
-});
+    const info = document.createElement('div');
+    info.className = 'vipps-info';
+    info.setAttribute('role','status');
+    info.setAttribute('aria-live','polite');
+    info.innerHTML = `
+      <strong>Nettsiden er under utvikling.</strong><br>
+      Vipps betaling kommer snart!
+      <button class="close-vipps-info" aria-label="Lukk melding">&times;</button>
+    `;
+    container.appendChild(info);
+    const closeBtn = info.querySelector('.close-vipps-info');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => info.remove());
+    }
+  });
+}
 
 // ---------- HERO ANIMASJON ----------
 // Legg til i script.js, etter DOMContentLoaded
@@ -92,22 +115,26 @@ window.addEventListener("DOMContentLoaded", () => {
     initSpices();
   }
 
-  // HERO VIDEO (currently background video): prefer respecting reduced motion
+  // HERO VIDEO simple one-shot playback respecting reduced motion
   const bgVideo = document.querySelector('.background-video');
   if (bgVideo && bgVideo.tagName === 'VIDEO') {
-    // Pause video if user prefers reduced motion
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (prefersReduced.matches) {
-      bgVideo.pause();
-      bgVideo.removeAttribute('autoplay');
-    }
-    prefersReduced.addEventListener('change', (e) => {
-      if (e.matches) {
+    function applyPref(){
+      if (prefersReduced.matches){
         bgVideo.pause();
+        bgVideo.removeAttribute('autoplay');
       } else {
-        bgVideo.play().catch(()=>{});
+        // Ensure it only plays once: remove loop attribute if present
+        bgVideo.removeAttribute('loop');
+        // If it hasn't started yet, attempt play
+        if (bgVideo.paused && bgVideo.currentTime === 0){
+          bgVideo.play().catch(()=>{});
+        }
       }
-    });
+    }
+    prefersReduced.addEventListener('change', applyPref);
+    if (bgVideo.readyState >= 1) applyPref(); else bgVideo.addEventListener('loadedmetadata', applyPref, { once:true });
+    // No custom looping: let it reach the last frame naturally and stop.
   }
 });
 
@@ -129,58 +156,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// ---------- HAMBURGER MENY ----------
-// Hamburger-meny for mobil og smale skjermer
-
-// Dynamisk hamburgermeny som vises kun når det ikke er plass til nav
-const hamburger = document.getElementById("hamburger-menu");
-const nav = document.querySelector(".nav");
-const header = document.querySelector(".site-header");
-
-function updateHamburgerMenu() {
-  if (!header || !nav || !hamburger) return;
-  // Vis begge for å måle
-  nav.classList.remove("hide");
-  hamburger.classList.remove("show");
-
-  // Sjekk om nav får plass i header
-  const headerRect = header.getBoundingClientRect();
-  const navRect = nav.getBoundingClientRect();
-  const logo = header.querySelector('.logo');
-  let logoWidth = 0;
-  if (logo) {
-    const logoRect = logo.getBoundingClientRect();
-    logoWidth = logoRect.width;
-  }
-  // Include order button width + buffer
-  const orderBtn = header.querySelector('.order-btn');
-  const orderWidth = orderBtn ? orderBtn.getBoundingClientRect().width : 0;
-  const buffer = 60; // space for hamburger
-  const availableWidth = headerRect.width - logoWidth - orderWidth - buffer;
-  if (navRect.width > availableWidth) {
-    nav.classList.add("hide");
-    hamburger.classList.add("show");
-  } else {
-    nav.classList.remove("hide");
-    hamburger.classList.remove("show");
-    nav.classList.remove("open");
-  }
-}
-
-window.addEventListener('DOMContentLoaded', updateHamburgerMenu);
-function debounce(fn, delay=120){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), delay); }; }
-window.addEventListener('resize', debounce(updateHamburgerMenu,150));
-
+// ---------- HAMBURGER MENY (simplified breakpoint-only) ----------
+const hamburger = document.getElementById('hamburger-menu');
+const nav = document.querySelector('.nav');
 if (hamburger && nav) {
-  hamburger.addEventListener("click", () => {
-    nav.classList.toggle("open");
+  hamburger.setAttribute('aria-expanded','false');
+  hamburger.setAttribute('aria-label','Meny');
+  hamburger.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
-  nav.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-      nav.classList.remove("open");
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('open');
+      hamburger.setAttribute('aria-expanded','false');
     });
   });
 }
+
+function debounce(fn, delay=120){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), delay); }; }
 
 // call this on load and on resize to keep --header-height accurate
 function updateHeaderHeightVar() {
