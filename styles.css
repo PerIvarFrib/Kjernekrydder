@@ -155,6 +155,13 @@ html, body { overflow: hidden; }
   padding:2rem;
 }
 
+/* Footer panel: full-bleed and bottom-aligned */
+.footer-panel{
+  padding:0;                 /* remove generic panel padding */
+  align-items:stretch;       /* let child footer stretch full width */
+  justify-content:flex-end;  /* push footer to the bottom of the viewport */
+}
+
 /* Intro (blank) should accept pointer events so user can swipe off it */
 .panel.intro{
   background:transparent;
@@ -343,7 +350,7 @@ html, body { overflow: hidden; }
   box-shadow:0 0 1px black;
 }
 @supports not ((backdrop-filter:blur(2px))) {
-  .hero-subtitle{background:rgba(0,0,0,0.55);} /* Slightly stronger fallback */
+  .hero-subtitle{background:var(--black-shade);} /* Slightly stronger fallback */
 }
 /* CTA button (hero primary action) */
 .cta{
@@ -367,14 +374,17 @@ html, body { overflow: hidden; }
 
 /* --- FOOTER ------------------------------------------------------------- */
 .site-footer{
-  width:100vw;
-  position:relative;left:50%;transform:translate(-50%);
-  margin-top: 2rem;
+  width:100%;
+  margin-top: auto;
   padding: 1rem;
   text-align: center;
-  background: var(--black-shade);
+  background: var(--black);
   color: var(--white);
   z-index: var(--z-hero-content);
+  /* Respect device safe areas while keeping full-bleed background */
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
 }
 
 .site-footer a{
@@ -587,6 +597,8 @@ html, body { overflow: hidden; }
 /* Små skjermer: gi litt mindre padding og skaler typografi */
 @media (max-width: 600px) {
   .panel { padding-inline: 0.75rem; }
+  /* On mobile, do not allow skipping multiple snap points in a fast fling */
+  .panel { scroll-snap-stop: always; }
   .hero-content {
     padding: 0.75rem;
     width: 100%;
