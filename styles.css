@@ -282,7 +282,7 @@ html, body { overflow: hidden; }
   width:100vw;height:100vh;
   object-fit:cover;
   /* Shift the visual center slightly downward */
-  --video-center-offset-y: 42px;
+  --video-center-offset-y: 60px;
   object-position: 50% calc(50% + var(--video-center-offset-y));
   z-index:var(--z-video);
   pointer-events:none;
