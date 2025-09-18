@@ -27,34 +27,45 @@ window.addEventListener('click', e => {
 });
 
 
-// ---------- MENGDEVELGER OG TOTALPRIS ----------
-const decreaseBtn = document.getElementById("decrease");
-const increaseBtn = document.getElementById("increase");
-const qtyEl = document.getElementById("qty");
-const totalEl = document.getElementById("total");
+// ---------- KJØPSALTERNATIVER (1 glass eller 6 glass) ----------
+const optionButtons = document.querySelectorAll('.option-btn');
+const totalEl = document.getElementById('total');
+const shippingCostEl = document.getElementById('shipping-cost');
+const shippingLine = document.getElementById('shipping-line');
 
-let quantity = 1;
-const unitPrice = 99; // pris per enhet i kr
+const baseShippingCost = 58;
 
-function updateTotal() {
-  if (totalEl) totalEl.textContent = `${quantity * unitPrice} kr`;
+function getShippingCost(units){
+  return units > 3 ? 0 : baseShippingCost;
 }
 
-if (decreaseBtn && increaseBtn && qtyEl && totalEl) {
-  decreaseBtn.addEventListener("click", () => {
-    if (quantity > 1) {
-      quantity--;
-      qtyEl.textContent = quantity;
-      updateTotal();
+function formatKr(n){return `${n} kr`;}
+
+function selectOption(btn){
+  optionButtons.forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const units = parseInt(btn.getAttribute('data-units'),10);
+  const price = parseInt(btn.getAttribute('data-price'),10);
+  const ship = getShippingCost(units);
+  if (totalEl) totalEl.textContent = formatKr(price + ship);
+  if (shippingCostEl) shippingCostEl.textContent = ship.toString();
+  // Hvis frakt er 0, endre tekst for klarhet
+  if (shippingLine){
+    if (ship === 0){
+      shippingLine.innerHTML = 'Gratis frakt';
+    } else {
+      shippingLine.innerHTML = `Inkl. fraktkostnader (<span id="shipping-cost">${ship}</span> kr)`;
     }
-  });
-
-  increaseBtn.addEventListener("click", () => {
-    quantity++;
-    qtyEl.textContent = quantity;
-    updateTotal();
-  });
+  }
 }
+
+optionButtons.forEach(btn => {
+  btn.addEventListener('click', () => selectOption(btn));
+});
+
+// Initierer første valg (hvis definert i HTML med .selected)
+const preselected = document.querySelector('.option-btn.selected') || optionButtons[0];
+if (preselected) selectOption(preselected);
 
 // ---------- VIPPS BETALINGSKNAPP ----------
 const vippsBtn = document.querySelector('.vipps-btn');

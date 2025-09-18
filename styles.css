@@ -392,6 +392,33 @@ html, body { overflow: hidden; }
 }
 .site-footer a:hover{color:var(--yellow)}
 
+/* Purchase option buttons */
+.purchase-options{
+  display:flex;
+  flex-direction:column;
+  gap:.65rem;
+  margin:.75rem 0 1rem 0;
+  width:80%;
+  max-width:320px;
+}
+.option-btn{
+  background:var(--orange);
+  color:var(--white);
+  border:1px solid transparent;
+  scale: 0.98;
+  padding:.6rem .9rem;
+  border-radius:10px;
+  cursor:pointer;
+  font: var(--weight-semibold) .95rem/1.25 var(--font-ui);
+  text-align:center;
+  transition:background .18s,color .18s,box-shadow .18s,transform .15s;
+  box-shadow:0 1px 3px var(--black-shade);
+}
+.option-btn:hover,.option-btn:focus-visible{background:var(--yellow);color:var(--black);scale:1.02;}
+.option-btn.selected{scale:1.05;background:var(--yellow);color:var(--black);box-shadow:0 1px 4px var(--black-shade);}
+.option-btn:active{transform:translateY(1px);}
+.option-btn .bundle-hint{font-weight:400;font-size:.8rem;opacity:.85;}
+
 /* Footer bottom logo (sacrificial space below important text) */
 .footer-logo-wrapper{margin-top:2rem;display:flex;justify-content:center;}
 .footer-logo-bottom{max-width:220px;width:60%;height:auto;}
