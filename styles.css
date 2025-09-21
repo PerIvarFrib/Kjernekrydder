@@ -17,7 +17,7 @@
   --blue: #335057;
   --light: #fff7e5;
   --white: #edf4f8;
-  --black-shade: #120b076c;
+  --black-shade: #120b075d;
   --vipps-oransje: #ff5b24;
   --vipps-hvit: #fff4ec;
 
@@ -25,8 +25,10 @@
   --hero-dim: rgba(0,0,0,0);
   --hero-blur: 0px;
 
-  --overlay-peak: 0.8;
+  --overlay-peak: 0.72;
   --page-overlay: 0;
+
+  --video-center-offset-y: 70px;
 
   /* Layering (z-index scale)
      Use a small, documented set to avoid arbitrary numbers */
@@ -280,7 +282,6 @@ html, body { overflow: hidden; }
   width:100vw;height:100vh;
   object-fit:cover;
   /* Shift the visual center slightly downward */
-  --video-center-offset-y: 60px;
   object-position: 50% calc(50% + var(--video-center-offset-y));
   z-index:var(--z-video);
   pointer-events:none;
@@ -296,7 +297,6 @@ html, body { overflow: hidden; }
   background-image: url('media/krydderfall-foreshadow.webp');
   background-size: cover;
   background-position: 50% calc(50% + var(--video-center-offset-y));
-  --video-center-offset-y: 60px;
   opacity:1;
   pointer-events:none;
   animation: videoFadeOut 2s ease forwards;

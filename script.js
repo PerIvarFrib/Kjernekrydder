@@ -151,6 +151,95 @@ window.addEventListener("DOMContentLoaded", () => {
     initSpices();
   }
 
+  // ---------- ONE-PAGE-AT-A-TIME SCROLL CONTROLLER ----------
+  const scrollContainer = document.querySelector('.scroll-container');
+  const panels = scrollContainer ? Array.from(scrollContainer.querySelectorAll('.panel')) : [];
+  let snapLock = false;           // lock during programmatic snap
+  let touchStartY = null;         // for touch gesture
+  let wheelAccum = 0;             // accumulate small wheel deltas
+  const WHEEL_THRESHOLD = 30;     // px
+  const TOUCH_THRESHOLD = 28;     // px
+
+  function currentPanelIndex(){
+    if (!scrollContainer || panels.length === 0) return 0;
+    const vh = scrollContainer.clientHeight || window.innerHeight;
+    let best = 0; let bestDist = Infinity;
+    for (let i=0;i<panels.length;i++){
+      const r = panels[i].getBoundingClientRect();
+      const d = Math.abs(r.top);
+      if (d < bestDist) { bestDist = d; best = i; }
+    }
+    // guard: if very near next panel bottom due to momentum, still pick closest
+    return best;
+  }
+  function snapTo(index){
+    if (!scrollContainer || panels.length === 0) return;
+    const clamped = Math.max(0, Math.min(panels.length - 1, index));
+    snapLock = true;
+    panels[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Unlock when scroll settles; fallback timer for older browsers
+    let unlockTimer = setTimeout(()=>{ snapLock = false; }, 650);
+    scrollContainer.addEventListener('scrollend', function onEnd(){
+      clearTimeout(unlockTimer); snapLock = false; scrollContainer.removeEventListener('scrollend', onEnd);
+    }, { once:true });
+  }
+  function snapNext(){ snapTo(currentPanelIndex() + 1); }
+  function snapPrev(){ snapTo(currentPanelIndex() - 1); }
+
+  // Wheel (desktop/trackpad)
+  if (scrollContainer){
+    scrollContainer.addEventListener('wheel', (e) => {
+      // If a modal is open, don't hijack scrolling
+      if (productModal && productModal.style.display === 'flex') return;
+      if (snapLock) { e.preventDefault(); return; }
+      // accumulate small deltas to avoid accidental triggers
+      wheelAccum += e.deltaY;
+      if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) { e.preventDefault(); return; }
+      e.preventDefault();
+      const dir = wheelAccum > 0 ? 1 : -1; wheelAccum = 0;
+      if (dir > 0) snapNext(); else snapPrev();
+    }, { passive: false });
+  }
+
+  // Touch (mobile)
+  if (scrollContainer){
+    scrollContainer.addEventListener('touchstart', (e) => { touchStartY = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : null; }, { passive: true });
+    scrollContainer.addEventListener('touchmove', (e) => {
+      if (touchStartY == null) return;
+      const y = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : touchStartY;
+      const dy = y - touchStartY;
+      if (Math.abs(dy) > TOUCH_THRESHOLD) {
+        // Prevent native scrolling beyond a single panel once threshold is met
+        e.preventDefault();
+      }
+    }, { passive: false });
+    scrollContainer.addEventListener('touchend', (e) => {
+      if (touchStartY == null) return;
+      const y = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : touchStartY;
+      const dy = y - touchStartY; touchStartY = null;
+      if (Math.abs(dy) < TOUCH_THRESHOLD) return;
+      if (dy < 0) snapNext(); else snapPrev();
+    }, { passive: true });
+  }
+
+  // Keyboard navigation
+  window.addEventListener('keydown', (e) => {
+    if (!scrollContainer) return;
+    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.altKey || e.metaKey || e.ctrlKey) return;
+    switch (e.key) {
+      case 'PageDown': case 'ArrowDown': case ' ':
+        if (e.shiftKey && e.key === ' ') { snapPrev(); } else { snapNext(); }
+        e.preventDefault();
+        break;
+      case 'PageUp': case 'ArrowUp':
+        snapPrev(); e.preventDefault();
+        break;
+      case 'Home': snapTo(0); e.preventDefault(); break;
+      case 'End': snapTo(panels.length - 1); e.preventDefault(); break;
+    }
+  }, { passive: false });
+
   // HERO VIDEO with foreshadow: fade overlay when video actually starts
   const bgVideo = document.querySelector('.background-video');
   if (bgVideo && bgVideo.tagName === 'VIDEO') {
@@ -191,19 +280,10 @@ window.addEventListener("DOMContentLoaded", () => {
       if (prefersReduced.matches || autoScrolled) return;
       setTimeout(() => {
         if (autoScrolled || userInteracted || !scrollContainer || panels.length === 0) return;
-        const vh = scrollContainer.clientHeight || window.innerHeight;
-        // Find current panel near top
-        let currentIndex = 0;
-        for (let i=0;i<panels.length;i++){
-          const r = panels[i].getBoundingClientRect();
-          if (Math.abs(r.top) < vh * 0.6) { currentIndex = i; break; }
-        }
-        const target = panels[Math.min(panels.length - 1, currentIndex + 1)];
-        if (target) {
-          autoScrolled = true;
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 1000);
+        autoScrolled = true;
+        // Reuse snap controller to move exactly one panel
+        snapNext();
+      }, 1800);
     }
     function tryPlay() {
       // keep muted to satisfy iOS autoplay policy
