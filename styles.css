@@ -368,6 +368,19 @@ html, body { overflow: hidden; }
   border-radius:3px;
   text-shadow:0 1px 2px black;
   box-shadow:0 0 1px black;
+
+  /* Ensure proper Norwegian hyphenation and avoid emergency break-word splits */
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+
+  overflow-wrap: normal;   /* override parent */
+  word-break: normal;      /* override parent */
+
+  /* Optional iOS tuning: avoid too-short fragments around hyphen */
+  -webkit-hyphenate-limit-before: 3;
+  -webkit-hyphenate-limit-after: 3;
+  -webkit-hyphenate-limit-lines: 2;
 }
 @supports not ((backdrop-filter:blur(2px))) {
   .hero-subtitle{background:var(--black-shade);} /* Slightly stronger fallback */
