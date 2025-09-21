@@ -287,6 +287,28 @@ html, body { overflow: hidden; }
   filter:brightness(.9) saturate(1.2) contrast(1.2);
 }
 
+/* Foreshadow overlay shows a static near-last frame; fades out when video starts */
+.video-foreshadow{
+  position:fixed;
+  width:100vw;height:100vh;
+  inset:0;
+  z-index: calc(var(--z-video) + 1);
+  background-image: url('media/krydderfall-foreshadow.webp');
+  background-size: cover;
+  background-position: 50% calc(50% + var(--video-center-offset-y));
+  --video-center-offset-y: 60px;
+  opacity:1;
+  pointer-events:none;
+  animation: videoFadeOut 2s ease forwards;
+  filter:brightness(.9) saturate(1.2) contrast(1.2);
+}
+.video-foreshadow.is-hidden{ opacity:0; }
+@keyframes videoFadeOut {
+  0% { opacity: 1; }
+  33.33% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* --- HERO --------------------------------------------------------------- */
 .hero{
   position:relative;

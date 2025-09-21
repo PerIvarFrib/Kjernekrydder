@@ -8,10 +8,12 @@
 </head>
 
 <body>
-  <video class="background-video" autoplay muted playsinline preload="metadata" poster="media/kjernekrydder.jpg">
+  <video class="background-video" autoplay muted playsinline webkit-playsinline preload="auto" poster="media/kjernekrydder.jpg">
     <source src="media/krydderfall-web.mp4" type="video/mp4">
     Din nettleser støtter ikke video.
   </video>
+  <!-- Foreskygging (statisk siste-frame-bilde) – fades ut når video starter -->
+  <div class="video-foreshadow" aria-hidden="true"></div>
 
   <div class="page-gradient-overlay" aria-hidden="true"></div>
   <!-- HEADER -->
@@ -49,7 +51,7 @@
       <div class="hero-content">
         <!-- <h1 class="text-display">Kjernekrydder</h1> -->
   <p class="subtitle text-lead hero-subtitle">En nykvernet krydderblanding inspirert av garam masala som varmer, dufter og pirrer smaksløkene.
-  Bruk den i indiske gryter, i saftige marinader eller gi den som gave til en matglad venn. Den beste oppskriften starter med din egen kreativitet!
+  Bruk den i indiske gryter, i saftige marinader eller gi den som gave til en matglad venn.
   </p>
         <!-- <p class="subtitle">Ingredienser: kanel, nellik, svart pepper, svart kardemomme og rød sichuan pepper.</p> -->
         <button class="cta text-ui" id="buy-btn-hero">Se produkt</button>
@@ -103,12 +105,12 @@
         svart kardemomme og rød sichuan pepper.
         </p>
       <div class="purchase-options" role="group" aria-label="Velg kjøpsalternativ">
-        <button class="option-btn" data-units="1" data-price="91">1 glass – 149 kr</button>
-        <button class="option-btn selected" data-units="6" data-price="499">6 glass – 499 kr</button>
+        <button class="option-btn" data-units="1" data-price="91" aria-pressed="false">1 glass – 149 kr</button>
+        <button class="option-btn" data-units="4" data-price="399" aria-pressed="false">4 glass – 399 kr</button>
       </div>
-      <p class="total">Total: <span id="total"> kr</span></p>
-  <div class="price-note" id="shipping-line">Inkl. fraktkostnader (<span id="shipping-cost">58</span> kr)</div>
-  <button class="vipps-btn text-ui"><img src="media/Vipps_logo.svg" alt="Vipps"> Bestill med Vipps</button>
+      <p class="total hidden">Total: <span id="total"> kr</span></p>
+  <div class="price-note hidden" id="shipping-line">Inkl. fraktkostnader (<span id="shipping-cost">58</span> kr)</div>
+  <button class="vipps-btn text-ui hidden"><img src="media/Vipps_logo.svg" alt="Vipps"> Bestill med Vipps</button>
   <p class="checkout-terms">Ved å fullføre kjøpet aksepterer du våre <a href="salgsbetingelser.html">salgsbetingelser</a>.</p>
     </div>
   </div>

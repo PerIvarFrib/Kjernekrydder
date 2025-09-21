@@ -12,6 +12,8 @@ function openModal(){
   // Focus trap entry point (could be expanded later)
   const title = productModal.querySelector('#product-title');
   if(title) title.focus?.();
+  // Reset purchase UI each time modal opens
+  resetPurchaseUI();
 }
 function closeModal(){
   if(!productModal) return;
@@ -32,6 +34,8 @@ const optionButtons = document.querySelectorAll('.option-btn');
 const totalEl = document.getElementById('total');
 const shippingCostEl = document.getElementById('shipping-cost');
 const shippingLine = document.getElementById('shipping-line');
+const totalRow = document.querySelector('.total');
+const vippsBtn = document.querySelector('.vipps-btn');
 
 const baseShippingCost = 58;
 
@@ -41,15 +45,38 @@ function getShippingCost(units){
 
 function formatKr(n){return `${n} kr`;}
 
+function resetPurchaseUI(){
+  optionButtons.forEach(b=>{
+    b.classList.remove('selected');
+    b.setAttribute('aria-pressed','false');
+  });
+  if (totalRow) totalRow.classList.add('hidden');
+  if (shippingLine) {
+    shippingLine.classList.add('hidden');
+    // Reset default shipping text
+    shippingLine.innerHTML = `Inkl. fraktkostnader (<span id="shipping-cost">${baseShippingCost}</span> kr)`;
+  }
+  if (vippsBtn) vippsBtn.classList.add('hidden');
+  if (totalEl) totalEl.textContent = ' kr';
+}
+
 function selectOption(btn){
-  optionButtons.forEach(b=>b.classList.remove('selected'));
+  const isAlreadySelected = btn.classList.contains('selected');
+  // Toggle off if clicking the same selected button
+  if (isAlreadySelected){
+    resetPurchaseUI();
+    return;
+  }
+  // Otherwise select this and show pricing + Vipps
+  optionButtons.forEach(b=>{ b.classList.remove('selected'); b.setAttribute('aria-pressed','false'); });
   btn.classList.add('selected');
+  btn.setAttribute('aria-pressed','true');
+
   const units = parseInt(btn.getAttribute('data-units'),10);
   const price = parseInt(btn.getAttribute('data-price'),10);
   const ship = getShippingCost(units);
   if (totalEl) totalEl.textContent = formatKr(price + ship);
-  if (shippingCostEl) shippingCostEl.textContent = ship.toString();
-  // Hvis frakt er 0, endre tekst for klarhet
+  // Oppdater fraktlinje
   if (shippingLine){
     if (ship === 0){
       shippingLine.innerHTML = 'Gratis frakt';
@@ -57,18 +84,16 @@ function selectOption(btn){
       shippingLine.innerHTML = `Inkl. fraktkostnader (<span id="shipping-cost">${ship}</span> kr)`;
     }
   }
+  if (totalRow) totalRow.classList.remove('hidden');
+  if (shippingLine) shippingLine.classList.remove('hidden');
+  if (vippsBtn) vippsBtn.classList.remove('hidden');
 }
 
 optionButtons.forEach(btn => {
   btn.addEventListener('click', () => selectOption(btn));
 });
 
-// Initierer første valg (hvis definert i HTML med .selected)
-const preselected = document.querySelector('.option-btn.selected') || optionButtons[0];
-if (preselected) selectOption(preselected);
-
 // ---------- VIPPS BETALINGSKNAPP ----------
-const vippsBtn = document.querySelector('.vipps-btn');
 if (vippsBtn) {
   vippsBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -126,25 +151,97 @@ window.addEventListener("DOMContentLoaded", () => {
     initSpices();
   }
 
-  // HERO VIDEO simple one-shot playback respecting reduced motion
+  // HERO VIDEO with foreshadow: fade overlay when video actually starts
   const bgVideo = document.querySelector('.background-video');
   if (bgVideo && bgVideo.tagName === 'VIDEO') {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const foreshadow = document.querySelector('.video-foreshadow');
+    // Ensure critical attributes for iOS inline autoplay
+    bgVideo.muted = true;
+    bgVideo.setAttribute('muted','');
+    bgVideo.setAttribute('playsinline','');
+    bgVideo.setAttribute('webkit-playsinline','');
+
+    // Helper to attempt play; resolves silently if blocked
+    let interactionHandlersBound = false;
+    const removeInteractionHandlers = () => {
+      if (!interactionHandlersBound) return;
+      interactionHandlersBound = false;
+      document.removeEventListener('pointerdown', tryPlayOnce, true);
+      document.removeEventListener('touchstart', tryPlayOnce, true);
+      document.removeEventListener('keydown', tryPlayOnce, true);
+    };
+    function hideForeshadow(){ if (foreshadow) foreshadow.classList.add('is-hidden'); }
+
+    // Auto-scroll setup: move down one snap after 1s if user hasn't interacted
+    const scrollContainer = document.querySelector('.scroll-container');
+    const panels = scrollContainer ? Array.from(scrollContainer.querySelectorAll('.panel')) : [];
+    let autoScrolled = false;
+    let userInteracted = false;
+    const markInteraction = () => { userInteracted = true; };
+    window.addEventListener('wheel', markInteraction, { passive: true });
+    window.addEventListener('touchstart', markInteraction, { passive: true });
+    window.addEventListener('keydown', markInteraction, { passive: true });
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', () => {
+        if (scrollContainer.scrollTop > 10) userInteracted = true;
+      }, { passive: true });
+    }
+    function scheduleAutoScroll(){
+      if (prefersReduced.matches || autoScrolled) return;
+      setTimeout(() => {
+        if (autoScrolled || userInteracted || !scrollContainer || panels.length === 0) return;
+        const vh = scrollContainer.clientHeight || window.innerHeight;
+        // Find current panel near top
+        let currentIndex = 0;
+        for (let i=0;i<panels.length;i++){
+          const r = panels[i].getBoundingClientRect();
+          if (Math.abs(r.top) < vh * 0.6) { currentIndex = i; break; }
+        }
+        const target = panels[Math.min(panels.length - 1, currentIndex + 1)];
+        if (target) {
+          autoScrolled = true;
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 1000);
+    }
+    function tryPlay() {
+      // keep muted to satisfy iOS autoplay policy
+      bgVideo.muted = true;
+      const p = bgVideo.play();
+      if (p && typeof p.then === 'function') {
+        p.then(() => { removeInteractionHandlers(); hideForeshadow(); scheduleAutoScroll(); }).catch(() => {});
+      }
+    }
+    function tryPlayOnce(){ removeInteractionHandlers(); tryPlay(); }
+
     function applyPref(){
       if (prefersReduced.matches){
         bgVideo.pause();
         bgVideo.removeAttribute('autoplay');
+        // Do not animate foreshadow away when reduced motion is requested
       } else {
         // Ensure it only plays once: remove loop attribute if present
         bgVideo.removeAttribute('loop');
         // If it hasn't started yet, attempt play
         if (bgVideo.paused && bgVideo.currentTime === 0){
-          bgVideo.play().catch(()=>{});
+          tryPlay();
+        }
+        // As a fallback, bind a single user interaction to start playback if blocked
+        if (!interactionHandlersBound) {
+          interactionHandlersBound = true;
+          document.addEventListener('pointerdown', tryPlayOnce, true);
+          document.addEventListener('touchstart', tryPlayOnce, true);
+          document.addEventListener('keydown', tryPlayOnce, true);
         }
       }
     }
     prefersReduced.addEventListener('change', applyPref);
     if (bgVideo.readyState >= 1) applyPref(); else bgVideo.addEventListener('loadedmetadata', applyPref, { once:true });
+    // Also try once media is buffered enough to play
+  bgVideo.addEventListener('loadeddata', () => { if (!prefersReduced.matches) tryPlay(); }, { once:true });
+  // Ensure foreshadow fades out when playback actually starts and schedule auto-scroll
+  bgVideo.addEventListener('playing', () => { hideForeshadow(); scheduleAutoScroll(); }, { once:true });
     // No custom looping: let it reach the last frame naturally and stop.
   }
 });
