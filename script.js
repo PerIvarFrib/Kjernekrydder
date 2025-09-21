@@ -159,6 +159,12 @@ window.addEventListener("DOMContentLoaded", () => {
   let wheelAccum = 0;             // accumulate small wheel deltas
   const WHEEL_THRESHOLD = 30;     // px
   const TOUCH_THRESHOLD = 28;     // px
+  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  // Remember original CSS scroll-snap so we can temporarily disable it to avoid jank
+  let originalSnapType = '';
+  if (scrollContainer) {
+    try { originalSnapType = getComputedStyle(scrollContainer).scrollSnapType || ''; } catch(_) {}
+  }
 
   function currentPanelIndex(){
     if (!scrollContainer || panels.length === 0) return 0;
@@ -175,13 +181,44 @@ window.addEventListener("DOMContentLoaded", () => {
   function snapTo(index){
     if (!scrollContainer || panels.length === 0) return;
     const clamped = Math.max(0, Math.min(panels.length - 1, index));
+
+    // Compute precise target inside the scroll container to avoid layout jumps
+    const containerRect = scrollContainer.getBoundingClientRect();
+    const panelRect = panels[clamped].getBoundingClientRect();
+    const targetScrollTop = scrollContainer.scrollTop + (panelRect.top - containerRect.top);
+
+    // Lock input while animating and temporarily disable CSS snap to reduce fighting/jank
     snapLock = true;
-    panels[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
-    // Unlock when scroll settles; fallback timer for older browsers
-    let unlockTimer = setTimeout(()=>{ snapLock = false; }, 650);
-    scrollContainer.addEventListener('scrollend', function onEnd(){
-      clearTimeout(unlockTimer); snapLock = false; scrollContainer.removeEventListener('scrollend', onEnd);
-    }, { once:true });
+    const prevInlineSnap = scrollContainer.style.scrollSnapType;
+    scrollContainer.style.scrollSnapType = 'none';
+
+    // Respect reduced motion; on iOS, smooth inside a container is supported in modern Safari
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    try {
+      scrollContainer.scrollTo({ top: targetScrollTop, behavior: prefersReduced ? 'auto' : 'smooth' });
+    } catch(_) {
+      scrollContainer.scrollTop = targetScrollTop;
+    }
+
+    const settleEpsilon = 2; // px distance considered "at rest"
+    const maxDuration = prefersReduced ? 120 : (isTouchDevice ? 550 : 450);
+    let settleTimer;
+
+    const cleanup = () => {
+      clearTimeout(settleTimer);
+      scrollContainer.removeEventListener('scroll', onScroll);
+      // Restore original snap behavior
+      scrollContainer.style.scrollSnapType = originalSnapType || prevInlineSnap || '';
+      snapLock = false;
+    };
+
+    const onScroll = () => {
+      const dist = Math.abs(scrollContainer.scrollTop - targetScrollTop);
+      if (dist <= settleEpsilon) cleanup();
+    };
+
+    scrollContainer.addEventListener('scroll', onScroll, { passive: true });
+    settleTimer = setTimeout(cleanup, maxDuration);
   }
   function snapNext(){ snapTo(currentPanelIndex() + 1); }
   function snapPrev(){ snapTo(currentPanelIndex() - 1); }
