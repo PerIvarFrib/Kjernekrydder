@@ -6,19 +6,116 @@
 	<title>Salgsbetingelser • Kjernekrydder</title>
 	<link rel="preload" href="styles.css" as="style">
 	<link rel="stylesheet" href="styles.css">
-		<style>
+	<style>
 		/* Page scaffold specific to terms page */
-			/* Allow scrolling on this standalone page (global css hides body overflow) */
-			html.terms-page, html.terms-page body{ overflow: auto; }
-			body{ background: var(--white); color: var(--black); }
-		.terms-wrap{ max-width: min(900px, 92vw); margin: 0 auto; padding: calc(var(--header-height,80px) + 2rem) 1rem 3rem; }
-		.terms-wrap h1{ font: var(--weight-bold) clamp(1.8rem, 5vw, 2.6rem)/var(--lh-tight) var(--font-brand); margin-bottom: .75rem; }
-		.terms-wrap p.lead{ font: var(--weight-regular) var(--font-lead)/var(--lh-relaxed) var(--font-brand); opacity: .9; margin: 0 0 1.25rem 0; }
-		.terms-section{ background: transparent; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1rem 1.1rem; }
-		.terms-section h2{ font: var(--weight-bold) 1.2rem/1.3 var(--font-ui); margin: 0 0 .35rem 0; color: var(--black); }
-		.terms-section p{ font: var(--weight-regular) 1rem/1.6 var(--font-brand); margin: .25rem 0; color: var(--black); }
-		.back-link{ display:inline-block; margin-bottom: 3rem; margin-top:1.2rem; color: var(--black); text-decoration: underline; }
-		.back-link:hover{ color: var(--yellow); }
+		/* Allow scrolling on this standalone page (global css hides body overflow) */
+		html.terms-page, html.terms-page body { 
+			overflow: auto; 
+		}
+		
+		body { 
+			background: var(--white); 
+			color: var(--black); 
+			line-height: 1.6;
+		}
+		
+		.terms-wrap { 
+			max-width: min(700px, 90vw); 
+			margin: 0 auto; 
+			padding: calc(var(--header-height, 80px) + 2rem) 1.5rem 3rem; 
+		}
+		
+		.terms-wrap h1 { 
+			font-family: "Cormorant Garamond";
+			font-weight: bold;
+			font-size: 2.2rem;
+			line-height: 1.3;
+			margin-bottom: 1rem;
+			color: var(--brown-dark);
+			text-align: left;
+		}
+		
+		.terms-wrap > p { 
+			font-family: "Cormorant Garamond";
+			font-size: 1.1rem;
+			line-height: 1.6;
+			opacity: 0.8;
+			margin: 0 0 2rem 0;
+			color: var(--brown);
+		}
+		
+		.terms-section { 
+			background: rgba(255, 255, 255, 0.5);
+			border: 1px solid rgba(109, 63, 40, 0.1);
+			border-radius: 8px;
+			padding: 1.5rem 1.8rem;
+			margin-bottom: 1.5rem;
+		}
+		
+		.terms-section h2 { 
+			font-family: "Cormorant Garamond";
+			font-weight: bold;
+			font-size: 1.3rem;
+			line-height: 1.3;
+			margin: 0 0 0.8rem 0;
+			color: var(--brown-dark);
+		}
+		
+		.terms-section p { 
+			font-family: "Cormorant Garamond";
+			font-size: 1rem;
+			line-height: 1.6;
+			margin: 0.5rem 0;
+			color: var(--black);
+		}
+		
+		.terms-section p:last-child {
+			margin-bottom: 0;
+		}
+		
+		.back-link { 
+			display: inline-block;
+			margin: 2rem 0 1rem;
+			color: var(--brown);
+			text-decoration: underline;
+			font-family: "Cormorant Garamond";
+			font-size: 1rem;
+		}
+		
+		.back-link:hover { 
+			color: var(--brown-dark);
+			text-decoration: none;
+		}
+		
+		/* Responsive improvements */
+		@media (max-width: 768px) {
+			.terms-wrap {
+				padding: calc(var(--header-height, 60px) + 1.5rem) 1rem 2rem;
+			}
+			
+			.terms-section {
+				padding: 1.2rem 1.3rem;
+				margin-bottom: 1.2rem;
+			}
+			
+			.terms-wrap h1 {
+				font-size: 2rem;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.terms-wrap {
+				padding: calc(var(--header-height, 60px) + 1rem) 0.8rem 1.5rem;
+			}
+			
+			.terms-section {
+				padding: 1rem 1.2rem;
+			}
+			
+			.terms-wrap h1 {
+				font-size: 1.8rem;
+			}
+		}
 	</style>
 	<link rel="icon" href="media/logo.webp">
 	<meta name="robots" content="noindex">
@@ -38,54 +135,57 @@
 </head>
 <body>
 	<header class="site-header">
-		<a class="logo" href="index.html" aria-label="Gå til forsiden">
-			<img src="media/logo.webp" alt="Kjernekrydder logo" width="320">
+		<a class="logo" href="index.html" aria-label="Gå til hjemmesiden">
+			<img src="media/logo.webp" alt="Kjernekrydder logo">
 		</a>
+		<div class="menu">
+			<a class="navigation" href="index.html#bottom">Kontakt</a>
+		</div>
 	</header>
 	<main class="terms-wrap" role="main">
-		<h1>Salgsbetingelser</h1>
-		<p class="lead">Gjelder for kjøp i nettbutikken Kjernekrydder.</p>
+		<h1 class="font-primary font-title">Salgsbetingelser</h1>
+		<p class="font-primary">Gjelder for kjøp i nettbutikken Kjernekrydder.</p>
 
 		<section class="terms-section" aria-labelledby="t1">
-			<h2 id="t1">1. Parter</h2>
-			<p>Selger er OP Friborg, org.nr. 930691186. Kjøper er den forbruker som foretar bestilling i nettbutikken.</p>
+			<h2 class="font-primary font-title" id="t1">1. Parter</h2>
+			<p class="font-primary">Selger er OP Friborg, org.nr. 930691186. Kjøper er den forbruker som foretar bestilling i nettbutikken.</p>
 		</section>
 
 		<section class="terms-section" aria-labelledby="t2">
-			<h2 id="t2">2. Betaling</h2>
-			<p>Vi tilbyr betaling via Vipps. Beløpet trekkes umiddelbart ved bestilling.</p>
+			<h2 class="font-primary font-title" id="t2">2. Betaling</h2>
+			<p class="font-primary">Vi tilbyr betaling via Vipps. Beløpet trekkes umiddelbart ved bestilling.</p>
 		</section>
 
 		<section class="terms-section" aria-labelledby="t3">
-			<h2 id="t3">3. Levering</h2>
-			<p>Varer sendes med Posten og leveres til kjøpers postkasse.</p>
-			<p>Fraktkostnad: 58&nbsp;NOK (digitalt frimerke, opptil 350&nbsp;g, 2–7&nbsp;cm tykt). Fri frakt på bestillinger over 398&nbsp;NOK.</p>
-			<p>Normal behandlingstid er 3 virkedager for pakking, i tillegg kommer Postens leveringstid (brev under 350&nbsp;g eller Norgespakken liten).</p>
+			<h2 class="font-primary font-title" id="t3">3. Levering</h2>
+			<p class="font-primary">Varer sendes med Posten og leveres til kjøpers postkasse.</p>
+			<p class="font-primary">Fraktkostnad: 58&nbsp;NOK (digitalt frimerke, opptil 350&nbsp;g, 2–7&nbsp;cm tykt). Fri frakt på bestillinger over 398&nbsp;NOK.</p>
+			<p class="font-primary">Normal behandlingstid er 3 virkedager for pakking, i tillegg kommer Postens leveringstid (brev under 350&nbsp;g eller Norgespakken liten).</p>
 		</section>
 
 		<section class="terms-section" aria-labelledby="t4">
-			<h2 id="t4">4. Angrerett</h2>
-			<p>Kjøper har 14 dagers angrerett i henhold til angrerettloven.</p>
-			<p>Angreretten gjelder ikke for matvarer med åpnet emballasje.</p>
+			<h2 class="font-primary font-title" id="t4">4. Angrerett</h2>
+			<p class="font-primary">Kjøper har 14 dagers angrerett i henhold til angrerettloven.</p>
+			<p class="font-primary">Angreretten gjelder ikke for matvarer med åpnet emballasje.</p>
 		</section>
 
 		<section class="terms-section" aria-labelledby="t5">
-			<h2 id="t5">5. Retur</h2>
-			<p>Retur utenom angrerett godtas ikke. Ved benyttet angrerett betaler kjøper selv returporto.</p>
+			<h2 class="font-primary font-title" id="t5">5. Retur</h2>
+			<p class="font-primary">Retur utenom angrerett godtas ikke. Ved benyttet angrerett betaler kjøper selv returporto.</p>
 		</section>
 
 		<section class="terms-section" aria-labelledby="t6">
-			<h2 id="t6">6. Reklamasjon</h2>
-			<p>Ved mangel kan kjøper kreve refusjon eller erstatningsvare i henhold til forbrukerkjøpsloven.</p>
-			<p>Reklamasjon meldes skriftlig med bilde som dokumentasjon.</p>
+			<h2 class="font-primary font-title" id="t6">6. Reklamasjon</h2>
+			<p class="font-primary">Ved mangel kan kjøper kreve refusjon eller erstatningsvare i henhold til forbrukerkjøpsloven.</p>
+			<p class="font-primary">Reklamasjon meldes skriftlig med bilde som dokumentasjon.</p>
 		</section>
 
 		<section class="terms-section" aria-labelledby="t7">
-			<h2 id="t7">7. Konfliktløsning</h2>
-			<p>Tvister søkes løst i minnelighet. Dersom dette ikke lykkes, kan kjøper bringe saken inn for Forbrukertilsynet eller Forbrukerklageutvalget.</p>
+			<h2 class="font-primary font-title" id="t7">7. Konfliktløsning</h2>
+			<p class="font-primary">Tvister søkes løst i minnelighet. Dersom dette ikke lykkes, kan kjøper bringe saken inn for Forbrukertilsynet eller Forbrukerklageutvalget.</p>
 		</section>
 
-			<a class="back-link" href="index.html">Tilbake til forsiden</a>
+		<a class="back-link font-primary" href="index.html">Tilbake til forsiden</a>
 	</main>
 		<script>
 			// Ensure --header-height is set correctly for this standalone page
