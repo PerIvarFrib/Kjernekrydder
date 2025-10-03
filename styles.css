@@ -230,7 +230,8 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 /* Responsive navigation improvements */
 @media (max-width: 480px) {
     .site-header {
-        padding: 0 0.5rem;
+        padding: 0 0.5rem 0 0;
+        --logo-size: 48px;
         height: 60px;
     }
     
