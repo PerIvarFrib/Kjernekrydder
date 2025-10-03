@@ -120,8 +120,8 @@ const shippingLine = document.getElementById('shipping-line');
 const vippsBtn = document.querySelector('#vipps-btn');
 // Immutable payment link map (test links for now)
 const PAYMENT_LINKS = Object.freeze({
-  1: 'https://betal.vipps.no/y0nmxp',
-  4: 'https://betal.vipps.no/y0nmxp'
+  1: 'https://betal.vipps.no/il7xjx',
+  4: 'https://betal.vipps.no/3v598p'
 });
 let currentUnits = null;
 const paymentSection = document.querySelector('.payment');
