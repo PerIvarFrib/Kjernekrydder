@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
 let hasScrolled = false;
 const observer = new IntersectionObserver(entries => {
     entry = entries[0];
-    console.log(entry.isIntersecting);
     if (!hasScrolled){
         mainContent.classList.toggle('darken', !entry.isIntersecting);
     } else {
@@ -71,78 +70,125 @@ closeModalButtons.forEach(button => {
     })
 })
 
+let lastFocusedElement = null;
+
+function trapFocus(container){
+  const focusableSelectors = 'a[href], button:not([disabled]), textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex]:not([tabindex="-1"])';
+  const focusable = Array.from(container.querySelectorAll(focusableSelectors))
+    .filter(el => !el.hasAttribute('hidden') && !el.classList.contains('hidden'));
+  if(!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  container.addEventListener('keydown', e => {
+    if(e.key === 'Tab'){
+      if(e.shiftKey && document.activeElement === first){
+        e.preventDefault();
+        last.focus();
+      } else if(!e.shiftKey && document.activeElement === last){
+        e.preventDefault();
+        first.focus();
+      }
+    } else if(e.key === 'Escape'){
+      closeModal(container.closest('.modal'));
+    }
+  });
+}
+
 function openModal(modal) {
     if (modal == null) return;
+    lastFocusedElement = document.activeElement;
     modal.classList.add('active');
+    const dialogContent = modal.querySelector('.modal-content');
+    dialogContent.setAttribute('aria-hidden','false');
+    trapFocus(dialogContent);
+    setTimeout(()=>{ dialogContent.focus(); },0);
 }
 
 function closeModal(modal) {
     if (modal == null) return;
     modal.classList.remove('active');
+    const dialogContent = modal.querySelector('.modal-content');
+    dialogContent.setAttribute('aria-hidden','true');
+    if(lastFocusedElement){ lastFocusedElement.focus(); }
 }
 
 // Product option functionality
-const optionButtons = document.querySelectorAll('.option-btn');
+const optionButtons = document.querySelectorAll('.option-btn[role="radio"]');
+const radioGroup = document.querySelector('.purchase-options[role="radiogroup"]');
 const totalElement = document.getElementById('total');
 const shippingLine = document.getElementById('shipping-line');
-const shippingCost = document.getElementById('shipping-cost');
 const vippsBtn = document.querySelector('.vipps-btn');
 const paymentSection = document.querySelector('.payment');
 
-optionButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        const isCurrentlyPressed = this.getAttribute('aria-pressed') === 'true';
-        
-        if (isCurrentlyPressed) {
-            // Toggle off - deselect this button and hide payment
-            this.setAttribute('aria-pressed', 'false');
-            hidePaymentSection();
-        } else {
-            // Remove aria-pressed from all buttons first
-            optionButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
-            
-            // Set aria-pressed to true for clicked button
-            this.setAttribute('aria-pressed', 'true');
-            
-            // Get price and units from data attributes
-            const price = parseInt(this.dataset.price);
-            const units = parseInt(this.dataset.units);
-            
-            let total, shippingText;
-            
-            if (units === 1) {
-                // 1 glass: include shipping cost
-                const shipping = 58;
-                total = price + shipping;
-                shippingText = `Inkl. fraktkostnader (${shipping} kr)`;
-            } else {
-                total = price;
-                shippingText = "Gratis frakt";
-            }
-            
-            // Update display
-            totalElement.textContent = `${total} kr`;
-            shippingLine.innerHTML = `<span class="font-primary font-product font-discrete">${shippingText}</span>`;
-            
-            // Show payment section and its elements
-            showPaymentSection();
-        }
+function updateSelection(newBtn){
+  optionButtons.forEach(btn=>{
+    const isTarget = btn === newBtn;
+    btn.setAttribute('aria-checked', isTarget ? 'true':'false');
+    if(isTarget){
+      btn.classList.add('selected');
+    } else {
+      btn.classList.remove('selected');
+    }
+  });
+}
+
+function computeTotals(btn){
+  const price = parseInt(btn.dataset.price,10);
+  const units = parseInt(btn.dataset.units,10);
+  let total, shippingText;
+  if(units === 1){
+    const shipping = 58;
+    total = price + shipping;
+    shippingText = `Inkl. fraktkostnader (${shipping} kr)`;
+  } else {
+    total = price;
+    shippingText = 'Gratis frakt';
+  }
+  totalElement.textContent = `${total} kr`;
+  shippingLine.textContent = shippingText;
+}
+
+// Simplified: always show payment and scroll modal to bottom
+function showPayment(){
+  paymentSection.classList.remove('hidden');
+  totalElement.parentElement.classList.remove('hidden');
+  shippingLine.classList.remove('hidden');
+  vippsBtn.classList.remove('hidden');
+
+  const modalContent = document.querySelector('#product-modal .modal-content');
+  if(modalContent){
+    requestAnimationFrame(()=>{
+      if(modalContent.scrollTo){
+        modalContent.scrollTo({top: modalContent.scrollHeight, behavior: 'smooth'});
+      } else {
+        paymentSection.scrollIntoView({behavior: 'smooth', block: 'end'});
+      }
     });
+  }
+}
+
+optionButtons.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    updateSelection(btn);
+    computeTotals(btn);
+    showPayment();
+  });
+  btn.addEventListener('keydown', e=>{
+    if(['ArrowRight','ArrowDown'].includes(e.key)){
+      e.preventDefault();
+      const idx = Array.from(optionButtons).indexOf(btn);
+      const next = optionButtons[(idx+1)%optionButtons.length];
+      next.focus();
+      next.click();
+    } else if(['ArrowLeft','ArrowUp'].includes(e.key)){
+      e.preventDefault();
+      const idx = Array.from(optionButtons).indexOf(btn);
+      const prev = optionButtons[(idx - 1 + optionButtons.length)%optionButtons.length];
+      prev.focus();
+      prev.click();
+    }
+  });
 });
 
-function showPaymentSection() {
-    paymentSection.classList.remove('hidden');
-    totalElement.parentElement.classList.remove('hidden');
-    shippingLine.classList.remove('hidden');
-    vippsBtn.classList.remove('hidden');
-}
-
-function hidePaymentSection() {
-    paymentSection.classList.add('hidden');
-    totalElement.parentElement.classList.add('hidden');
-    shippingLine.classList.add('hidden');
-    vippsBtn.classList.add('hidden');
-    
-    // Clear the total text
-    totalElement.textContent = ' kr';
-}
+// Remove old aria-pressed logic remnants if any (defensive)
+optionButtons.forEach(b=> b.removeAttribute('aria-pressed'));

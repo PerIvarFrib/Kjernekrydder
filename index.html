@@ -2,49 +2,93 @@
 <html lang="no">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Kjernekrydder</title>
-	<link rel="stylesheet" href="styles.css">
-	<script src="script.js" defer></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Kjernekrydder – Nykvernet krydderblanding inspirert av garam masala | Nykvernet gave til matglade</title>
+	<meta name="description" content="Kjernekrydder er en nykvernet krydderblanding inspirert av garam masala. Perfekt i gryter, marinader og som smakfull gave. Kjøp 1 eller 4 glass – enkel betaling med Vipps." />
+	<link rel="canonical" href="https://kjernekrydder.no/" />
+	<link rel="icon" href="media/logo.webp" />
+	<meta property="og:locale" content="nb_NO" />
+	<meta property="og:title" content="Kjernekrydder – Nykvernet krydderblanding" />
+	<meta property="og:description" content="Nykvernet krydderblanding inspirert av garam masala. Passer til gryter, marinader og som gave." />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://kjernekrydder.no/" />
+	<meta property="og:image" content="https://kjernekrydder.no/media/kjernekrydder.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+	<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Kjernekrydder",
+  "url": "https://kjernekrydder.no/",
+  "logo": "https://kjernekrydder.no/media/logo.webp",
+  "sameAs": []
+}
+	</script>
+	<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Kjernekrydder 40g",
+  "image": ["https://kjernekrydder.no/media/kjernekrydder.webp"],
+  "description": "Nykvernet krydderblanding inspirert av garam masala – kanel, nellik, svart pepper, svart kardemomme og rød sichuan pepper.",
+  "brand": {"@type": "Brand", "name": "Kjernekrydder"},
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "NOK",
+    "lowPrice": "99",
+    "highPrice": "399",
+    "offerCount": "2",
+    "availability": "https://schema.org/InStock"
+  }
+}
+	</script>
+	<link rel="preload" href="styles.min.css?v=1.0" as="style">
+	<link rel="preload" href="script.min.js?v=1.0" as="script">
+	<link rel="preload" href="media/kjernekrydder.webp" as="image" type="image/webp">
+	<link rel="stylesheet" href="styles.min.css?v=1.0">
+	<script src="script.min.js?v=1.0" defer></script>
 </head>
 
 <body>
+	<a href="#main" class="skip-link">Hopp til hovedinnhold</a>
 	<div class="wrapper">
-		<header id="top" class="site-header">
+		<header id="top" class="site-header" role="banner">
 			<a class="logo" href="#" aria-label="Gå til hjemmesiden">
-				<img src="media/logo.webp" alt="Kjernekrydder logo">
+				<img src="media/logo.webp" alt="Kjernekrydder logo" width="180" height="50" />
 			</a>
-			<div class="menu">
+			<nav class="menu" aria-label="Hovednavigasjon">
 				<a class="navigation" href="#bottom">Kontakt</a>
-				<button data-modal-target="#product-modal" class="menu-product-btn" aria-label="Se produkt">
-					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 16" stroke="currentColor">
+				<button data-modal-target="#product-modal" class="menu-product-btn" type="button" aria-label="Se produkt">
+					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 16" stroke="currentColor" aria-hidden="true" focusable="false">
 						<g stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
 							<path d="M3 10h18l-2 7a2 2 0 0 1-2 1H7a2 2 0 0 1-2-1l-2-7z"/>
 							<path d="M8 10V6a4 4 0 1 1 8 0v4"/>
 						</g>
 					</svg>
 				</button>
-			</div>
+			</nav>
 		</header>
 
-		<video class="background-video" src="media/krydderfall-web.mp4" muted playsinline webkit-playsinline preload="auto"></video>
-		<img class="background-img" src="media/krydderfall-foreshadow.webp">
-		<!-- <button id="playButton" class="hidden" aria-label="Play video">
-			<span class="triangle"></span>
-		</button> -->
+		<video class="background-video" src="media/krydderfall-web.mp4" muted playsinline webkit-playsinline preload="auto" aria-hidden="true" tabindex="-1" width="1920" height="1080"></video>
+		<img class="background-img" src="media/krydderfall-foreshadow.webp" alt="Stemningsbilde av krydder som faller – varm bakgrunn" aria-hidden="true" loading="lazy" width="1920" height="1080" />
 
-		<main class="main-content">
-			<section class="blank" id="page-one"></section>
+		<main class="main-content" id="main" role="main">
+			<h1 class="visually-hidden">Kjernekrydder – Nykvernet krydderblanding</h1>
+			<h2 class="visually-hidden">krydder til matlaging og gaver</h2>
+			<section class="blank" id="page-one" aria-hidden="true"></section>
 			<section class="hero" id="hero">
-				<p class="font-primary font-hero">En nykvernet krydderblanding inspirert av garam masala som varmer, dufter og pirrer smaksløkene. 
-					Bruk den i indiske gryter, i saftige marinader eller gi den som gave til en matglad venn.
+				<p class="font-primary font-hero">Nykvernet krydderblanding inspirert av garam masala som varmer, dufter og pirrer smaksløkene. 
+					Bruk Kjernekrydder i indiske gryter, ovnsretter, saftige marinader, eller gi den som gave til en matglad venn.
 				</p>
-				<button data-modal-target="#product-modal" class="product-btn font-primary" id="show-product">Se produkt</button>
+				<button data-modal-target="#product-modal" class="product-btn font-primary" id="show-product" type="button">Se produkt</button>
 			</section>
 
 			<section class="footer-section">
-				<p></p>
-				<footer id="bottom" class="site-footer">
+				<div class="footer-spacer" aria-hidden="true"></div>
+				<footer id="bottom" class="site-footer" role="contentinfo">
+					<h2 class="visually-hidden">Kontakt og informasjon</h2>
 					<p class="font-primary">OP FRIBORG / 930691186<br>
 					Karolinerveien 10A, 7021 Trondheim<br>
 					<a href="mailto:post@kjernekrydder.no">post@kjernekrydder.no</a> • <a href="tel:+4746968902">469 68 902</a><br>
@@ -52,33 +96,34 @@
 					&copy; 2025 Kjernekrydder. Alle rettigheter reservert.
 					</p>
 					<a class="logo" href="#" aria-label="Gå til forsiden">
-						<img src="media/logo.webp" alt="Kjernekrydder logo">
+						<img src="media/logo.webp" alt="Kjernekrydder logo – nykvernet krydder" loading="lazy" width="216" height="60" />
 					</a>
 				</footer>
 			</section>
 		</main>
 	</div>
 
-	<div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-title">
-		<div class="modal-content">
-			<span data-close-button class="close font-primary font-small">&leftarrow; Tilbake</span>
+	<div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-title" aria-describedby="produktbeskrivelse">
+		<div class="modal-content" tabindex="-1">
+			<button data-close-button class="close font-primary font-small" type="button">&leftarrow; Tilbake</button>
 			<picture>
-				<source srcset="media/kjernekrydder.webp" type="image/webp">
-				<img src="media/kjernekrydder.webp" alt="Kjernekrydder produkt" loading="eager" decoding="async">
+				<source srcset="media/kjernekrydder.webp" type="image/webp" />
+				<img id="product-img" src="media/kjernekrydder.webp" alt="Glass med Kjernekrydder – nykvernet krydderblanding" loading="eager" decoding="async" />
 			</picture>
-			<h2 class="font-primary font-product font-title">Kjernekrydder 40g</h2>
+			<h2 id="product-title" class="font-primary font-product font-title">Kjernekrydder 40g</h2>
 			<p id="produktbeskrivelse" class="font-primary font-product">
 				Ingredienser: kanel, nellik, svart pepper,
 				svart kardemomme og rød sichuan pepper.
 			</p>
-			<div class="purchase-options" role="group" aria-label="Velg kjøpsalternativ">
-				<button class="option-btn font-primary font-hero" data-units="1" data-price="99" aria-pressed="false">1 GLASS</br>,-99</button>
-				<button class="option-btn font-primary font-hero" data-units="4" data-price="399" aria-pressed="false">4 GLASS</br>,-399</button>
+			<h3 class="font-primary font-product font-title purchase-heading">Velg antall:</h3>
+			<div class="purchase-options" role="radiogroup" aria-label="Velg kjøpsalternativ">
+				<button class="option-btn font-primary font-hero" role="radio" aria-checked="false" data-units="1" data-price="99">1 glass<br>99 kr</button>
+				<button class="option-btn font-primary font-hero" role="radio" aria-checked="false" data-units="4" data-price="399">4 glass<br>399 kr</button>
 			</div>
 			<div class="payment hidden">
-				<h3 class="font-primary font-product font-title hidden">Total: <span id="total"> kr</span></h3>
-				<div class="font-primary font-product font-discrete hidden" id="shipping-line">Inkl. fraktkostnader (<span id="shipping-cost">58</span> kr)</div>
-				<button class="vipps-btn hidden"><img src="media/Vipps_logo.svg" alt="Vipps">Bestill med Vipps</button>
+				<h3 class="font-primary font-product font-title hidden">Total: <span id="total" aria-live="polite"> kr</span></h3>
+				<div class="font-primary font-product font-discrete hidden" id="shipping-line" role="status" aria-live="polite">Inkl. fraktkostnader (<span id="shipping-cost">58</span> kr)</div>
+				<button class="vipps-btn hidden" type="button"><img src="media/Vipps_logo.svg" alt="Vipps" />Bestill med Vipps</button>
 				<p class="font-primary font-product">Ved å fullføre kjøpet aksepterer du våre <a href="salgsbetingelser.html">salgsbetingelser</a>.</p>
 			</div>
 		</div>

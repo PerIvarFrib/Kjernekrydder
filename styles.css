@@ -10,8 +10,10 @@
     --vipps-oransje: #ff5b24;
     --vipps-hvit: #fff4ec;
     --vipps-svart: #161225;
-
+    /* Original static header height */
     --header-height: 72px;
+    /* Standardized logo size */
+    --logo-size: 56px;
 }
 
 html{
@@ -32,10 +34,18 @@ body{
 html, body{
     height:100%;
 }
+/* Global responsive media handling */
+img, video{
+    max-width:100%;
+    height:auto;
+    display:block;
+}
 @media (max-width: 480px) {
     body {
         background-color: var(--black);
     }
+    /* Ensure media fills container width on small screens */
+    img, video{width:100%;height:auto;}
 }
 @media (min-width: 481px) and (max-width: 768px) {
     body {
@@ -72,7 +82,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     line-height: 1.6rem;
 }
 .font-hero{
-    font-size: 1.18rem;
+    font-size: 1.1rem; /* restore fixed size */
     text-shadow: 1px 1px 1px var(--brown);
 }
 .font-small{
@@ -112,15 +122,28 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     40%{filter: brightness(0.8) contrast(1.3)}
     100%{filter: brightness(0.9) contrast(1.2)}
 }
-.background--fade-down{
-    mask-image:linear-gradient(to top, black 40%, transparent 60%);
-    mask-size:100% 260%;
-    animation: fadeDown 3s linear forwards;
-} @keyframes fadeDown{
-    0%{mask-position:bottom;opacity:1;}
+.background--fade-down {
+  position: relative;
+  -webkit-mask-image: linear-gradient(to top, black 40%, transparent 60%);
+  mask-image: linear-gradient(to top, black 40%, transparent 60%);
+  
+  -webkit-mask-size: 100% 260%;
+  mask-size: 100% 260%;
+  
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  animation: fadeDown 3s linear forwards;
+}
+@keyframes fadeDown{
+    0%{mask-position:bottom;
+        -webkit-mask-position:bottom;
+        opacity:1;}
     40%{opacity:1}
     60%{opacity:0}
-    100%{mask-position:top;opacity:0;}
+    100%{mask-position:top;
+        -webkit-mask-position:top;
+        opacity:0;}
 }
 .darken{
     animation: darken 0.6s linear forwards;
@@ -175,7 +198,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     background: var(--brown);
     color: var(--white);
     border: none;
-    padding: 0.7rem;
+    padding: 10px;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -198,9 +221,11 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 }
 
 .menu-product-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
 }
+
+/* Removed rem-based mobile button sizing to keep original pixel layout */
 
 /* Responsive navigation improvements */
 @media (max-width: 480px) {
@@ -209,9 +234,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
         height: 60px;
     }
     
-    :root {
-        --header-height: 60px;
-    }
+    /* Retain original header height (no fluid override) */
     
     .menu {
         gap: 1rem;
@@ -233,9 +256,12 @@ footer a:hover, header a:hover, footer a:focus, a:active{
         height: 18px;
     }
     
-    .logo img {
-        max-height: calc(var(--header-height) - 12px);
-        margin: 6px;
+    .logo img{
+        height: var(--logo-size);
+        width: auto;
+        max-width: 100%;
+        display: block;
+        margin: 8px;
     }
 }
 
@@ -283,7 +309,8 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 .main-content{
     opacity: 0;
     background-color: var(--black-shade);
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 }
 .main-content section{
     height: calc(100dvh - var(--header-height));
@@ -375,8 +402,8 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     background: linear-gradient(135deg, var(--orange) 0%, var(--yellow) 100%);
     color: var(--black);
     border: none;
-    padding: 1rem 2.5rem;
-    font-size: 1.3rem;
+    padding: 16px 40px;
+    font-size: 18px;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -443,11 +470,16 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 	margin-top:auto;
 }
 .site-footer a img{
-	max-height: calc(var(--header-height));
+    height:var(--logo-size);
+    margin-left:auto;
+    margin-right:auto;
 }
 .logo img{
-    max-height: calc(var(--header-height) - 16px);
-    margin: 8px 8px 8px 8px;
+    height: var(--logo-size);
+    width: auto;
+    max-width: 100%;
+    display: block;
+    margin: 8px;
 }
 
 .modal {
@@ -468,15 +500,15 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     color: var(--black);
     border: 1px solid var(--black);
     /* border-radius: 8px; */
-    max-width: 500px;
+    max-width: min(90vw, 32rem);
     width: 90%;
-    max-height: 80vh;
+    max-height: 80dvh;
     overflow-y: auto;
     overscroll-behavior: contain;
     /* padding: 2rem; */
     position: relative;
 }
-.modal-content img {
+#product-img {
     max-width: 100%;
     /* max-height: 33vh; */
     object-fit: cover;           
@@ -486,8 +518,6 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     filter: sepia(0.2) brightness(0.7) contrast(1.7) saturate(1);
 }
 .close {
-    width: 4.4rem;
-    height: 1.3rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -510,7 +540,6 @@ footer a:hover, header a:hover, footer a:focus, a:active{
   justify-content: center;
   width:100%;
   box-shadow: 0 -1px 2px var(--black-shade);
-  /* width: 100%; */
 }
 .option-btn {
     width: 100%;
@@ -519,21 +548,45 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     border: none;
     padding: 1rem 1rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     font-weight: 500;
     font-size: 1rem;
-}
-#productbeskrivelse {
-	color: var(--orange);
+    position: relative;
+    overflow: hidden;
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
 }
 
+.option-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.option-btn:hover::before {
+    left: 100%;
+}
+.purchase-options .option-btn:first-child {
+    transform-origin: left center;
+}
 .option-btn:last-child {
     border-right: none;
+    transform-origin: right center;
 }
 
 .option-btn:hover, .option-btn:focus {
     background: var(--orange);
     color: var(--white);
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(195, 83, 9, 0.3),
+    0 0 0 2px var(--white);
+    z-index: 2;
 }
 
 .option-btn:active {
@@ -542,9 +595,24 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 }
 
 .option-btn[aria-pressed="true"] {
-    background: var(--orange);
+    background: var(--yellow);
     color: var(--black);
     font-weight: 600;
+    transform: scale(1.02);
+    box-shadow: 
+        0 4px 15px rgba(237, 244, 248, 0.8),
+        0 0 0 2px var(--white);
+    z-index: 3;
+}
+
+.option-btn[aria-pressed="true"]::after {
+    content: '✓';
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0.8;
 }
 .price-note {
   font-size: 0.9rem;
@@ -554,12 +622,11 @@ footer a:hover, header a:hover, footer a:focus, a:active{
   margin: -0.5rem 0 1rem 0;
 }
 .payment{
-    border-top: 1px solid var(--vipps-svart);
-    background-color: var(--vipps-hvit);
+    /* border-top: 1px solid var(--black); */
+    background-color: var(--white);
     padding-bottom: 1.6rem;
 }
 .vipps-btn{
-    background:var(--vipps-hvit);
     color:var(--vipps-oransje);
     padding:.4rem 0.6rem;
     border:none;
@@ -583,7 +650,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
   box-shadow:none;
 }
 .vipps-btn:hover,.vipps-btn:focus{
-  background-color:transparent;
+  background-color:var(--vipps-hvit);
 }
 .vipps-btn:active{
   transform: scale(0.98);
@@ -612,4 +679,16 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 #overlay.active {
     opacity: 1;
     pointer-events: all;
+}
+
+/* Accessibility utilities */
+.skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;background:var(--white);color:var(--black);padding:.75rem 1rem;border-radius:8px;text-decoration:none;box-shadow:0 0 0 2px var(--black);z-index:1000;}
+.skip-link:focus-visible{left:50%;top:.75rem;width:auto;height:auto;transform:translateX(-50%);} 
+.visually-hidden{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0 0 0 0) !important;white-space:nowrap !important;border:0 !important;}
+.hidden{display:none !important;opacity:0 !important;}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:3px;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition:none !important;scroll-behavior:auto !important;}
+  .background-video{display:none;}
 }

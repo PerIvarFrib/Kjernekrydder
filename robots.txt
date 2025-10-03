@@ -1,0 +1,7 @@
+User-agent: *
+Disallow:
+
+# Terms page already carries meta noindex (optional redundancy)
+# Disallow: /salgsbetingelser.html
+
+Sitemap: https://kjernekrydder.no/sitemap.xml
