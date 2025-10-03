@@ -117,7 +117,13 @@ const optionButtons = document.querySelectorAll('.option-btn[role="radio"]');
 const radioGroup = document.querySelector('.purchase-options[role="radiogroup"]');
 const totalElement = document.getElementById('total');
 const shippingLine = document.getElementById('shipping-line');
-const vippsBtn = document.querySelector('.vipps-btn');
+const vippsBtn = document.querySelector('#vipps-btn');
+// Immutable payment link map (test links for now)
+const PAYMENT_LINKS = Object.freeze({
+  1: 'https://betal.vipps.no/y0nmxp',
+  4: 'https://betal.vipps.no/y0nmxp'
+});
+let currentUnits = null;
 const paymentSection = document.querySelector('.payment');
 
 function updateSelection(newBtn){
@@ -135,6 +141,7 @@ function updateSelection(newBtn){
 function computeTotals(btn){
   const price = parseInt(btn.dataset.price,10);
   const units = parseInt(btn.dataset.units,10);
+  currentUnits = units;
   let total, shippingText;
   if(units === 1){
     const shipping = 58;
@@ -146,6 +153,12 @@ function computeTotals(btn){
   }
   totalElement.textContent = `${total} kr`;
   shippingLine.textContent = shippingText;
+  // Update Vipps link strictly from whitelist
+  if(PAYMENT_LINKS[units]){
+    vippsBtn.setAttribute('href', PAYMENT_LINKS[units]);
+  } else {
+    vippsBtn.removeAttribute('href');
+  }
 }
 
 // Simplified: always show payment and scroll modal to bottom
@@ -192,3 +205,13 @@ optionButtons.forEach(btn=>{
 
 // Remove old aria-pressed logic remnants if any (defensive)
 optionButtons.forEach(b=> b.removeAttribute('aria-pressed'));
+
+// Guard against tampering: ensure link matches whitelist before navigation
+vippsBtn.addEventListener('click', (e)=>{
+  const href = vippsBtn.getAttribute('href');
+  if(!currentUnits || !href || PAYMENT_LINKS[currentUnits] !== href){
+    e.preventDefault();
+    return false;
+  }
+});
+
