@@ -632,8 +632,9 @@ footer a:hover, header a:hover, footer a:focus, a:active{
         border-radius: 8px;
         transition:background .2s ease,color .2s ease,transform .2s ease;
         display:grid;
-        grid-template-columns:auto 1fr;
+        grid-template-columns:min-content 1fr;
         align-items:center;
+        overflow-wrap:anywhere;
         column-gap:.6rem;
         white-space: normal;
         line-height: 1.25;
