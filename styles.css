@@ -10,9 +10,7 @@
     --vipps-oransje: #ff5b24;
     --vipps-hvit: #fff4ec;
     --vipps-svart: #161225;
-    /* Original static header height */
     --header-height: 72px;
-    /* Standardized logo size */
     --logo-size: 56px;
 }
 
@@ -623,47 +621,57 @@ footer a:hover, header a:hover, footer a:focus, a:active{
   margin: -0.5rem 0 1rem 0;
 }
 .payment{
-    /* border-top: 1px solid var(--black); */
     background-color: var(--white);
     padding-bottom: 1.6rem;
 }
 .vipps-btn{
-    color:var(--vipps-oransje);
-    padding:.4rem 0.6rem;
-    border:none;
-    cursor:pointer;
-    border-radius: 8px;
-    transition:background .2s ease,color .2s ease,transform .2s ease;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:.5rem;
-    font-family: "Vipps Display", sans-serif;
-    font-weight:560;
-    font-size:1rem;
-    margin: 1rem auto;
-    width: fit-content;
-    background-color: var(--vipps-svart)
+        color:var(--vipps-oransje);
+        padding:0.4rem 0 0.4rem 0.6rem;
+        border:none;
+        cursor:pointer;
+        border-radius: 8px;
+        transition:background .2s ease,color .2s ease,transform .2s ease;
+        display:grid;
+        grid-template-columns:auto 1fr;
+        align-items:center;
+        column-gap:.6rem;
+        white-space: normal;
+        line-height: 1.25;
+        text-align: left;
+        font-family: "Vipps Display", sans-serif;
+        font-weight:560;
+        font-size:1rem;
+        margin: 1rem auto;
+        width: 60%;
+        background-color: var(--vipps-svart)
 }
 .vipps-btn img{
-  height:42px;
-  border:none;
-  box-shadow:none;
+    width:auto;
+    height:3.4rem;
+    max-width:none;
+    flex:0 0 auto;
+    display:inline-block;
+    border:none;
+    box-shadow:none;
+}
+.vipps-btn:link,
+.vipps-btn:visited{
+    color: var(--vipps-oransje);
+    text-decoration: none;
 }
 .vipps-btn:hover,.vipps-btn:focus{
-  background-color:var(--vipps-hvit);
+    background-color:var(--vipps-hvit);
+    color: var(--vipps-oransje);
+    text-decoration: none;
+    box-shadow: 0 0 3px 1px var(--vipps-svart);
 }
 .vipps-btn:active{
   transform: scale(0.98);
 }
 
-.modal-content a {
+.modal-content a:not(.vipps-btn) {
     color: var(--black);
     text-decoration: underline;
-}
-
-.modal-content a:hover {
-  color: var(--yellow);
 }
 
 #overlay {
@@ -682,7 +690,6 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     pointer-events: all;
 }
 
-/* Accessibility utilities */
 .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;background:var(--white);color:var(--black);padding:.75rem 1rem;border-radius:8px;text-decoration:none;box-shadow:0 0 0 2px var(--black);z-index:1000;}
 .skip-link:focus-visible{left:50%;top:.75rem;width:auto;height:auto;transform:translateX(-50%);} 
 .visually-hidden{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0 0 0 0) !important;white-space:nowrap !important;border:0 !important;}
