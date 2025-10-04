@@ -11,14 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
         bImg.classList.add('background--fade-down');
         // playButton.classList.add('background--fade-down'); // Commented out
         bVideo.classList.add('background--video-in');
-    }, 1000); // Small delay to ensure everything is loaded
+    }, 2000); // Small delay to ensure everything is loaded
 });
 
-// Instantly pause background video after Safari/iOS "autoplay unlock"
-bVideo.addEventListener('play', () => {
-  bVideo.pause();
-  bVideo.currentTime = 0; // reset to start frame
-}, { once: true });
+// // Instantly pause background video after Safari/iOS "autoplay unlock"
+// bVideo.addEventListener('play', () => {
+//   bVideo.pause();
+//   bVideo.currentTime = 0; // reset to start frame
+// }, { once: true });
 
 // Removed wrapper click event since we auto-start now
 // wrapper.addEventListener('click', function(){
@@ -47,7 +47,7 @@ bImg.addEventListener('animationend', function(){
         if (!hasScrolled){
             document.getElementById("hero").scrollIntoView({behavior: "smooth"});
         }
-    }, 3000);
+    }, 3600);
 })
 
 
