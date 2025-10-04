@@ -7,6 +7,8 @@ const wrapper = document.getElementsByClassName("wrapper")[0];
 
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-start the video sequence when DOM loads
+    bVideo.load();
+    bVideo.play();
     setTimeout(() => {
         bImg.classList.add('background--fade-down');
         // playButton.classList.add('background--fade-down'); // Commented out
@@ -42,14 +44,14 @@ const observer = new IntersectionObserver(entries => {
 observer.observe(home);
 
 bImg.addEventListener('animationend', function(){
-    bVideo.play();
+  requestAnimationFrame(() => {
     setTimeout(() => {
-        if (!hasScrolled){
-            document.getElementById("hero").scrollIntoView({behavior: "smooth"});
-        }
-    }, 3600);
-})
-
+      if (!hasScrolled){
+        document.getElementById("hero").scrollIntoView({behavior: "smooth"});
+      }
+    }, 3000);
+  });
+});
 
 const openModalButtons = document.querySelectorAll('[data-modal-target]');
 const closeModalButtons = document.querySelectorAll('[data-close-button]');
