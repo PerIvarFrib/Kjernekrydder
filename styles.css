@@ -629,7 +629,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 }
 .vipps-btn{
         color:var(--vipps-oransje);
-        padding:0.4rem 0 0.4rem 0.6rem;
+        padding:0.4rem 0.6rem 0.4rem 0.6rem;
         border:none;
         cursor:pointer;
         border-radius: 8px;
