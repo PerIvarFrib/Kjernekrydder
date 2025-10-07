@@ -6,6 +6,12 @@ const wrapper = document.getElementsByClassName("wrapper")[0];
 // const playButton = document.getElementById("playButton"); // Commented out
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure a baseline history entry exists so Back from modal stays on this page
+    try {
+      if (!history.state || !history.state.__kkBase) {
+        history.replaceState(Object.assign({}, history.state, { __kkBase: true }), '');
+      }
+    } catch(_) {}
     // Auto-start the video sequence when DOM loads
     bVideo.load();
     bVideo.play();
@@ -146,7 +152,11 @@ function openModal(modal) {
   trapFocus(dialogContent);
   setTimeout(()=>{ dialogContent.focus(); },0);
   // Push a history state so a single Back closes the modal first
-  try { history.pushState({ modalOpen: true }, ''); } catch(_) {}
+  try {
+    if (!history.state || !history.state.modalOpen) {
+      history.pushState(Object.assign({}, history.state, { modalOpen: true }), '');
+    }
+  } catch(_) {}
 }
 
 function closeModal(modal) {
