@@ -153,7 +153,7 @@
 
 		<section class="terms-section" aria-labelledby="t2">
 			<h2 class="font-primary font-title" id="t2">2. Betaling</h2>
-			<p class="font-primary">Vi tilbyr betaling via Vipps. Beløpet trekkes umiddelbart ved bestilling.</p>
+			<p class="font-primary">Vi tilbyr betaling via Vipps. Beløpet reserveres ved bestilling, og vises som trukket beløp hos kunden. Trekk skjer når ordren bekreftes av oss.</p>
 		</section>
 
 		<section class="terms-section" aria-labelledby="t3">
@@ -161,6 +161,7 @@
 			<p class="font-primary">Varer sendes med Posten og leveres til kjøpers postkasse.</p>
 			<p class="font-primary">Fraktkostnad: 58&nbsp;NOK (digitalt frimerke, opptil 350&nbsp;g, 2–7&nbsp;cm tykt). Fri frakt på bestillinger over 398&nbsp;NOK.</p>
 			<p class="font-primary">Normal behandlingstid er 3 virkedager for pakking, i tillegg kommer Postens leveringstid (brev under 350&nbsp;g eller Norgespakken liten).</p>
+			<p class="font-primary">Vi leverer kun til adresser i Norge. Det er kjøpers ansvar å oppgi korrekt og fullstendig norsk leveringsadresse.</p>
 		</section>
 
 		<section class="terms-section" aria-labelledby="t4">
@@ -187,14 +188,21 @@
 
 		<a class="back-link font-primary" href="index.html">Tilbake til forsiden</a>
 	</main>
-		<!-- <script>
-			// Ensure --header-height is set correctly for this standalone page
+		<script>
+			// Make the bottom link behave like the browser back button to preserve modal state on index
 			document.addEventListener('DOMContentLoaded', function(){
-				var header = document.querySelector('.site-header');
-				if(header){
-					document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
-				}
+				var backLink = document.querySelector('.back-link');
+				if(!backLink) return;
+				backLink.addEventListener('click', function(e){
+					e.preventDefault();
+					if (history.length > 1) {
+						history.back();
+					} else {
+						// Fallback if no history entry exists (direct visit)
+						window.location.href = backLink.getAttribute('href') || 'index.html';
+					}
+				});
 			});
-		</script> -->
+		</script>
 </body>
 </html>

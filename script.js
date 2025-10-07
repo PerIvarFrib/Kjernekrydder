@@ -14,6 +14,23 @@ document.addEventListener('DOMContentLoaded', function() {
         // playButton.classList.add('background--fade-down'); // Commented out
         bVideo.classList.add('background--video-in');
     }, 2000); // Small delay to ensure everything is loaded
+
+  // If returning from an internal page (e.g., salgsbetingelser) and we
+  // flagged to restore the modal, do so and clear the flag.
+  if (history.state && history.state.restoreModalOnBack) {
+    try { history.replaceState(Object.assign({}, history.state, { restoreModalOnBack: false }), ''); } catch(_) {}
+    const modal = document.getElementById('product-modal');
+    if (modal) { openModal(modal); }
+  }
+});
+
+// Also handle BFCache restores where DOMContentLoaded may not fire again
+window.addEventListener('pageshow', function(){
+  if (history.state && history.state.restoreModalOnBack) {
+    try { history.replaceState(Object.assign({}, history.state, { restoreModalOnBack: false }), ''); } catch(_) {}
+    const modal = document.getElementById('product-modal');
+    if (modal) { openModal(modal); }
+  }
 });
 
 // // Instantly pause background video after Safari/iOS "autoplay unlock"
@@ -71,14 +88,32 @@ document.getElementById('product-modal').addEventListener('click', (e) => {
     }
 });
 
+// If user clicks a normal link inside the modal content (e.g., salgsbetingelser),
+// flag the current history entry so that pressing Back returns with the modal open again.
+(function(){
+  const modalContent = document.querySelector('#product-modal .modal-content');
+  if(!modalContent) return;
+  modalContent.addEventListener('click', (e)=>{
+    const a = e.target.closest('a[href]');
+    if(!a) return;
+    const href = a.getAttribute('href') || '';
+    // Ignore external/non-document links and the Vipps button
+    if (a.classList.contains('vipps-btn')) return;
+    if (href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('#')) return;
+    // Likely internal navigation; mark to restore modal on back
+    try { history.replaceState(Object.assign({}, history.state, { restoreModalOnBack: true }), ''); } catch(_) {}
+  });
+})();
+
 closeModalButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const modal = button.closest('.modal');
-        closeModal(modal);
-    })
+  button.addEventListener('click', () => {
+    const modal = button.closest('.modal');
+    closeModal(modal);
+  })
 })
 
 let lastFocusedElement = null;
+let isClosingFromPopstate = false;
 
 function trapFocus(container){
   const focusableSelectors = 'a[href], button:not([disabled]), textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex]:not([tabindex="-1"])';
@@ -103,13 +138,15 @@ function trapFocus(container){
 }
 
 function openModal(modal) {
-    if (modal == null) return;
-    lastFocusedElement = document.activeElement;
-    modal.classList.add('active');
-    const dialogContent = modal.querySelector('.modal-content');
-    dialogContent.setAttribute('aria-hidden','false');
-    trapFocus(dialogContent);
-    setTimeout(()=>{ dialogContent.focus(); },0);
+  if (modal == null) return;
+  lastFocusedElement = document.activeElement;
+  modal.classList.add('active');
+  const dialogContent = modal.querySelector('.modal-content');
+  dialogContent.setAttribute('aria-hidden','false');
+  trapFocus(dialogContent);
+  setTimeout(()=>{ dialogContent.focus(); },0);
+  // Push a history state so a single Back closes the modal first
+  try { history.pushState({ modalOpen: true }, ''); } catch(_) {}
 }
 
 function closeModal(modal) {
@@ -118,7 +155,21 @@ function closeModal(modal) {
     const dialogContent = modal.querySelector('.modal-content');
     dialogContent.setAttribute('aria-hidden','true');
     if(lastFocusedElement){ lastFocusedElement.focus(); }
+    // If we added a history entry for the modal, consume it on close
+    if (!isClosingFromPopstate && history.state && history.state.modalOpen) {
+      try { history.back(); } catch(_) {}
+    }
 }
+
+// Intercept browser back button to close modal if open
+window.addEventListener('popstate', function(event) {
+  const modal = document.getElementById('product-modal');
+  if (modal && modal.classList.contains('active')) {
+    isClosingFromPopstate = true;
+    closeModal(modal);
+    isClosingFromPopstate = false;
+  }
+});
 
 // Product option functionality
 const optionButtons = document.querySelectorAll('.option-btn[role="radio"]');

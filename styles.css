@@ -486,7 +486,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     position: fixed;
     transform: scale(0);
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.5);
     align-items: center;
     justify-content: center;
     transition: 200ms ease-in-out;
@@ -500,7 +500,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     border: 1px solid var(--black);
     /* border-radius: 8px; */
     max-width: min(90vw, 32rem);
-    width: 90%;
+    width: 82%;
     max-height: 80dvh;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -523,6 +523,9 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     color: var(--white);
     background: var(--orange);
     cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.2rem;
 }
 .close:hover, .close:focus {
   background: var(--yellow);
