@@ -14,14 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch(_) {}
     // Auto-start the video sequence when DOM loads
     bVideo.load();
-    bVideo.muted = true;
-    bVideo.play().catch((error) => {
-      console.error("Autoplay failed:", error);
-    });
+    bVideo.play();
     setTimeout(() => {
         bImg.classList.add('background--fade-down');
         // playButton.classList.add('background--fade-down'); // Commented out
         bVideo.classList.add('background--video-in');
+        bVideo.play();
     }, 2000); // Small delay to ensure everything is loaded
 
   // If returning from an internal page (e.g., salgsbetingelser) and we
