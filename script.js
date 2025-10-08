@@ -14,7 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch(_) {}
     // Auto-start the video sequence when DOM loads
     bVideo.load();
-    bVideo.play();
+    bVideo.muted = true;
+    bVideo.play().catch((error) => {
+      console.error("Autoplay failed:", error);
+    });
     setTimeout(() => {
         bImg.classList.add('background--fade-down');
         // playButton.classList.add('background--fade-down'); // Commented out
@@ -281,6 +284,15 @@ vippsBtn.addEventListener('click', (e)=>{
   if(!currentUnits || !href || PAYMENT_LINKS[currentUnits] !== href){
     e.preventDefault();
     return false;
+  }
+});
+
+document.addEventListener("click", function () {
+  const bVideo = document.getElementsByClassName("background-video")[0];
+  if (bVideo && bVideo.paused) {
+    bVideo.play().catch((error) => {
+      console.error("Play failed:", error);
+    });
   }
 });
 
