@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="no" class="recipe-root">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Oppskrifter med Kjernekrydder</title>
+	<meta name="description" content="La deg inspirere av oppskrifter laget med Kjernekrydder. Finn din nye favoritt og kom i gang p&aring; kj&oslash;kkenet." />
+	<link rel="canonical" href="https://kjernekrydder.no/oppskrifter" />
+	<link rel="icon" href="media/favicon.webp" />
+	<link rel="stylesheet" href="styles.css?v=1.0">
+	<link rel="stylesheet" href="recipes.css?v=1.0">
+	<script src="script.js?v=1.0" defer></script>
+	<script src="recipes.js" defer></script>
+</head>
+<body class="recipe-page">
+	<a href="#main" class="skip-link">Hopp til hovedinnhold</a>
+	<header id="top" class="site-header" role="banner">
+		<a class="logo" href="index.html" aria-label="G&aring; til forsiden">
+			<img src="media/logo.webp" alt="Kjernekrydder logo" width="180" height="50" />
+		</a>
+		<nav class="menu" aria-label="Hovednavigasjon">
+			<a class="navigation" href="oppskrifter.html" aria-current="page">Oppskrifter</a>
+			<button data-modal-target="#product-modal" class="menu-product-btn" type="button" aria-label="Se produkt">
+				<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 16" stroke="currentColor" aria-hidden="true" focusable="false">
+					<g stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M3 10h18l-2 7a2 2 0 0 1-2 1H7a2 2 0 0 1-2-1l-2-7z"/>
+						<path d="M8 10V6a4 4 0 1 1 8 0v4"/>
+					</g>
+				</svg>
+			</button>
+		</nav>
+	</header>
+	<main id="main" class="recipe-main" role="main">
+		<div class="recipe-shell">
+			<header class="recipe-header">
+				<a class="recipe-back" href="index.html#main">&larr; Tilbake til forsiden</a>
+				<h1 class="recipe-title">Oppskrifter med Kjernekrydder</h1>
+				<p class="recipe-intro hidden">Utforsk retter der Kjernekrydder gir varme, dybde og aromatisk karakter til hverdag og fest.</p>
+			</header>
+			<section class="recipe-index" aria-label="Oppskriftsoversikt">
+				<p class="recipe-status" data-recipe-status aria-live="polite">Henter oppskrifter &hellip;</p>
+				<div class="recipe-grid" data-recipe-grid hidden></div>
+				<noscript>
+					<p>Aktiver JavaScript for &aring; se oppskriftsoversikten, eller bes&oslash;k lenkene direkte:</p>
+					<ul class="recipe-noscript-list">
+						<li><a href="oppskrifter/krydderkake.html">Krydderkake med Kjernekrydder</a></li>
+						<li><a href="oppskrifter/indisk_blomkaalgryte.html">Indisk blomk&aring;lgryte</a></li>
+					</ul>
+				</noscript>
+			</section>
+		</div>
+		<section class="footer-section">
+			<footer id="bottom" class="site-footer" role="contentinfo">
+				<h2 class="visually-hidden">Kontakt og informasjon</h2>
+				<p class="font-primary">OP FRIBORG / 930691186<br>
+				Karolinerveien 10A, 7021 Trondheim<br>
+				<a href="mailto:post@kjernekrydder.no">post@kjernekrydder.no</a> • <a href="tel:+4746968902">469 68 902</a><br>
+				<a href="salgsbetingelser.html">Salgsbetingelser</a><br>
+				&copy; 2025 Kjernekrydder. Alle rettigheter reservert.
+				</p>
+				<a class="logo" href="index.html" aria-label="G&aring; til forsiden">
+					<img src="media/logo.webp" alt="Kjernekrydder logo – nykvernet krydder" loading="lazy" width="216" height="60" />
+				</a>
+			</footer>
+		</section>
+	</main>
+	<div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-title" aria-describedby="produktbeskrivelse">
+		<div class="modal-content" tabindex="-1" aria-hidden="true">
+			<button data-close-button class="close font-primary" type="button">&times;</button>
+			<picture>
+				<source srcset="media/kjernekrydder.webp" type="image/webp" />
+				<img id="product-img" src="media/kjernekrydder.webp" alt="Glass med Kjernekrydder – nykvernet krydderblanding" loading="eager" decoding="async" />
+			</picture>
+			<h2 id="product-title" class="font-primary font-product font-title">Kjernekrydder 40g</h2>
+			<p id="produktbeskrivelse" class="font-primary font-product">
+				Ingredienser: kanel, nellik, svart pepper,
+				svart kardemomme og r&oslash;d sichuan pepper.
+			</p>
+			<h3 class="font-primary font-product font-title purchase-heading">Velg antall:</h3>
+			<div class="purchase-options" role="radiogroup" aria-label="Velg kj&oslash;psalternativ">
+				<button class="option-btn font-primary font-hero" role="radio" aria-checked="false" data-units="1" data-price="99">Ett glass<br>99 kr<br>(+ 58 kr frakt)</button>
+				<button class="option-btn font-primary font-hero" role="radio" aria-checked="false" data-units="4" data-price="399">Fire glass<br>399 kr<br>(+ 0 kr frakt)</button>
+			</div>
+			<div class="payment hidden">
+				<h3 class="font-primary font-product font-title hidden">Total: <span id="total" aria-live="polite"> kr</span></h3>
+				<div class="font-primary font-product font-discrete hidden" id="shipping-line" role="status" aria-live="polite">Inkl. fraktkostnader (<span id="shipping-cost">58</span> kr)</div>
+				<a id="vipps-btn" class="vipps-btn hidden" href="#" role="button" rel="noopener noreferrer" target="_blank"><img src="media/Vipps_logo.svg" alt="Vipps" />Bestill med Vipps</a>
+				<p class="font-primary font-product">Ved &aring; fullf&oslash;re kj&oslash;pet aksepterer du v&aring;re <a href="salgsbetingelser.html">salgsbetingelser</a>.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

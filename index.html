@@ -43,11 +43,11 @@
     "availability": "https://schema.org/InStock"
   }
 }</script>
-	<link rel="preload" href="styles.min.css?v=1.0" as="style">
-	<link rel="preload" href="script.min.js?v=1.0" as="script">
+	<link rel="preload" href="styles.css?v=1.0" as="style">
+	<link rel="preload" href="script.js?v=1.0" as="script">
 	<link rel="preload" href="media/kjernekrydder.webp" as="image" type="image/webp">
-	<link rel="stylesheet" href="styles.min.css?v=1.0">
-	<script src="script.min.js?v=1.0" defer></script>
+	<link rel="stylesheet" href="styles.css?v=1.0">
+	<script src="script.js?v=1.0" defer></script>
 </head>
 
 <body>
@@ -58,7 +58,7 @@
 				<img src="media/logo.webp" alt="Kjernekrydder logo" width="180" height="50" />
 			</a>
 			<nav class="menu" aria-label="Hovednavigasjon">
-				<a class="navigation" href="#bottom">Kontakt</a>
+				<a class="navigation" href="oppskrifter.html">Oppskrifter</a>
 				<button data-modal-target="#product-modal" class="menu-product-btn" type="button" aria-label="Se produkt">
 					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 16" stroke="currentColor" aria-hidden="true" focusable="false">
 						<g stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -81,7 +81,10 @@
 				<p class="font-primary font-hero">Nykvernet krydderblanding inspirert av garam masala som varmer, dufter og pirrer smaksløkene. 
 					Bruk Kjernekrydder i indiske gryter, ovnsretter, saftige marinader, eller gi den som gave til en matglad venn.
 				</p>
-				<button data-modal-target="#product-modal" class="product-btn font-primary" id="show-product" type="button">Se produkt</button>
+				<div class="hero-actions">
+					<button data-modal-target="#product-modal" class="product-btn font-primary" id="show-product" type="button">Se produkt</button>
+					<a class="recipe-btn" href="oppskrifter.html">Se oppskrifter</a>
+				</div>
 			</section>
 
 			<section class="footer-section">

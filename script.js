@@ -3,6 +3,7 @@ const bVideo = document.getElementsByClassName("background-video")[0];
 const mainContent = document.getElementsByClassName("main-content")[0];
 const home = document.querySelector('#page-one');
 const wrapper = document.getElementsByClassName("wrapper")[0];
+const productModal = document.getElementById('product-modal');
 // const playButton = document.getElementById("playButton"); // Commented out
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -13,21 +14,24 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     } catch(_) {}
     // Auto-start the video sequence when DOM loads
-    bVideo.load();
-    bVideo.play();
-    setTimeout(() => {
+    if (bVideo) {
+      try { bVideo.load(); } catch(_) {}
+      bVideo.play().catch(() => {});
+    }
+    if (bImg && bVideo) {
+      setTimeout(() => {
         bImg.classList.add('background--fade-down');
         // playButton.classList.add('background--fade-down'); // Commented out
         bVideo.classList.add('background--video-in');
-        bVideo.play();
-    }, 2000); // Small delay to ensure everything is loaded
+        bVideo.play().catch(() => {});
+      }, 2000); // Small delay to ensure everything is loaded
+    }
 
   // If returning from an internal page (e.g., salgsbetingelser) and we
   // flagged to restore the modal, do so and clear the flag.
   if (history.state && history.state.restoreModalOnBack) {
     try { history.replaceState(Object.assign({}, history.state, { restoreModalOnBack: false }), ''); } catch(_) {}
-    const modal = document.getElementById('product-modal');
-    if (modal) { openModal(modal); }
+    if (productModal) { openModal(productModal); }
   }
 });
 
@@ -35,8 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('pageshow', function(){
   if (history.state && history.state.restoreModalOnBack) {
     try { history.replaceState(Object.assign({}, history.state, { restoreModalOnBack: false }), ''); } catch(_) {}
-    const modal = document.getElementById('product-modal');
-    if (modal) { openModal(modal); }
+    if (productModal) { openModal(productModal); }
   }
 });
 
@@ -55,8 +58,9 @@ window.addEventListener('pageshow', function(){
 // });
 
 let hasScrolled = false;
-const observer = new IntersectionObserver(entries => {
-    entry = entries[0];
+if (home && mainContent) {
+  const observer = new IntersectionObserver(entries => {
+    const entry = entries[0];
     if (!hasScrolled){
         mainContent.classList.toggle('darken', !entry.isIntersecting);
     } else {
@@ -64,18 +68,24 @@ const observer = new IntersectionObserver(entries => {
         mainContent.classList.toggle('darken', !entry.isIntersecting);
     }
     if (!hasScrolled && !entry.isIntersecting){hasScrolled = true;}
-}, {threshold:0.5});
-observer.observe(home);
+  }, {threshold:0.5});
+  observer.observe(home);
+}
 
-bImg.addEventListener('animationend', function(){
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      if (!hasScrolled){
-        document.getElementById("hero").scrollIntoView({behavior: "smooth"});
-      }
-    }, 3000);
+if (bImg) {
+  bImg.addEventListener('animationend', function(){
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        if (!hasScrolled){
+          const hero = document.getElementById("hero");
+          if (hero) {
+            hero.scrollIntoView({behavior: "smooth"});
+          }
+        }
+      }, 3000);
+    });
   });
-});
+}
 
 const openModalButtons = document.querySelectorAll('[data-modal-target]');
 const closeModalButtons = document.querySelectorAll('[data-close-button]');
@@ -88,17 +98,20 @@ openModalButtons.forEach(button => {
 })
 
 // Click on modal background (outside content) to close
-document.getElementById('product-modal').addEventListener('click', (e) => {
+if (productModal) {
+  productModal.addEventListener('click', (e) => {
     // Only close if clicking on the modal itself, not its content
     if (e.target === e.currentTarget) {
-        closeModal(e.target);
+      closeModal(e.target);
     }
-});
+  });
+}
 
 // If user clicks a normal link inside the modal content (e.g., salgsbetingelser),
 // flag the current history entry so that pressing Back returns with the modal open again.
 (function(){
-  const modalContent = document.querySelector('#product-modal .modal-content');
+  if(!productModal) return;
+  const modalContent = productModal.querySelector('.modal-content');
   if(!modalContent) return;
   modalContent.addEventListener('click', (e)=>{
     const a = e.target.closest('a[href]');
@@ -250,47 +263,52 @@ function showPayment(){
   }
 }
 
-optionButtons.forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    updateSelection(btn);
-    computeTotals(btn);
-    showPayment();
+if (optionButtons.length) {
+  optionButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      updateSelection(btn);
+      computeTotals(btn);
+      showPayment();
+    });
+    btn.addEventListener('keydown', e=>{
+      if(['ArrowRight','ArrowDown'].includes(e.key)){
+        e.preventDefault();
+        const idx = Array.from(optionButtons).indexOf(btn);
+        const next = optionButtons[(idx+1)%optionButtons.length];
+        next.focus();
+        next.click();
+      } else if(['ArrowLeft','ArrowUp'].includes(e.key)){
+        e.preventDefault();
+        const idx = Array.from(optionButtons).indexOf(btn);
+        const prev = optionButtons[(idx - 1 + optionButtons.length)%optionButtons.length];
+        prev.focus();
+        prev.click();
+      }
+    });
   });
-  btn.addEventListener('keydown', e=>{
-    if(['ArrowRight','ArrowDown'].includes(e.key)){
-      e.preventDefault();
-      const idx = Array.from(optionButtons).indexOf(btn);
-      const next = optionButtons[(idx+1)%optionButtons.length];
-      next.focus();
-      next.click();
-    } else if(['ArrowLeft','ArrowUp'].includes(e.key)){
-      e.preventDefault();
-      const idx = Array.from(optionButtons).indexOf(btn);
-      const prev = optionButtons[(idx - 1 + optionButtons.length)%optionButtons.length];
-      prev.focus();
-      prev.click();
-    }
-  });
-});
 
-// Remove old aria-pressed logic remnants if any (defensive)
-optionButtons.forEach(b=> b.removeAttribute('aria-pressed'));
+  // Remove old aria-pressed logic remnants if any (defensive)
+  optionButtons.forEach(b=> b.removeAttribute('aria-pressed'));
+}
 
 // Guard against tampering: ensure link matches whitelist before navigation
-vippsBtn.addEventListener('click', (e)=>{
-  const href = vippsBtn.getAttribute('href');
-  if(!currentUnits || !href || PAYMENT_LINKS[currentUnits] !== href){
-    e.preventDefault();
-    return false;
-  }
-});
+if (vippsBtn) {
+  vippsBtn.addEventListener('click', (e)=>{
+    const href = vippsBtn.getAttribute('href');
+    if(!currentUnits || !href || PAYMENT_LINKS[currentUnits] !== href){
+      e.preventDefault();
+      return false;
+    }
+  });
+}
 
-document.addEventListener("click", function () {
-  const bVideo = document.getElementsByClassName("background-video")[0];
-  if (bVideo && bVideo.paused) {
-    bVideo.play().catch((error) => {
-      console.error("Play failed:", error);
-    });
-  }
-});
+if (bVideo) {
+  document.addEventListener("click", function () {
+    if (bVideo && bVideo.paused) {
+      bVideo.play().catch((error) => {
+        console.error("Play failed:", error);
+      });
+    }
+  });
+}
 
