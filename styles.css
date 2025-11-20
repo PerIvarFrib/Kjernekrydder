@@ -75,7 +75,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     color:var(--yellow);
 }
 .font-primary{
-    font-family: "Cormorant Garamond";
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
     color:var(--white);
     line-height: 1.6rem;
 }

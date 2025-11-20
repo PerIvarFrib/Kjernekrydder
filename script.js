@@ -82,7 +82,7 @@ if (bImg) {
             hero.scrollIntoView({behavior: "smooth"});
           }
         }
-      }, 3000);
+      }, 1000);
     });
   });
 }
