@@ -2,15 +2,15 @@
 	{
 		"slug": "krydderkake",
 		"title": "Kjernekrydderkake med ostekrem",
-		"description": "Pepperkake i form med uslåelig god kryddersmak, toppet med ostekrem. Passer perfekt til kaffekosen, uansett årstid.",
+		"description": "Krydderkake i form med uslåelig god kryddersmak, toppet med ostekrem. Passer perfekt til kaffekosen, uansett årstid.",
 		"image": "media/oppskrifter/krydderkake.webp",
 		"imageAlt": "Kjernekrydderkake med ostekrem. "
 	},
 	{
 		"slug": "indisk_blomkaalgryte",
-		"title": "Indisk blomk&aring;lgryte",
-		"description": "Tomatbasert indisk blomk&aring;lgryte med tofu, sm&oslash;rb&oslash;nner og potet. Nytes alene som et komplett m&aring;ltid, eller med ris, nanbr&oslash;d og chutney.",
+		"title": "Indisk blomkålgryte",
+		"description": "Tomatbasert indisk blomkålgryte med tofu, smørbønner og potet. Nytes alene som et komplett måltid, eller med ris, nanbrød og chutney.",
 		"image": "media/oppskrifter/indisk_blomkaal.webp",
-		"imageAlt": "Indisk blomk&aring;lgryte servert med fersk koriander"
+		"imageAlt": "Indisk blomkålgryte servert med fersk koriander"
 	}
 ]
