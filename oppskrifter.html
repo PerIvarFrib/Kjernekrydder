@@ -72,9 +72,11 @@
 				svart kardemomme og r&oslash;d sichuan pepper.
 			</p>
 			<h3 class="font-primary font-product font-title purchase-heading">Velg antall:</h3>
-			<div class="purchase-options" role="radiogroup" aria-label="Velg kj&oslash;psalternativ">
-				<button class="option-btn font-primary font-hero" role="radio" aria-checked="false" data-units="1" data-price="99">Ett glass<br>99 kr<br>(+ 58 kr frakt)</button>
-				<button class="option-btn font-primary font-hero" role="radio" aria-checked="false" data-units="4" data-price="399">Fire glass<br>399 kr<br>(+ 0 kr frakt)</button>
+			<div class="purchase-options" aria-label="Velg antall glass">
+				<span class="font-primary font-product"></span>
+				<button id="quantity-minus" class="option-btn font-primary font-hero" type="button" aria-label="Færre glass">−</button>
+				<span id="quantity-display" class="font-primary font-product" aria-live="polite">1</span>
+				<button id="quantity-plus" class="option-btn font-primary font-hero" type="button" aria-label="Flere glass">+</button>
 			</div>
 			<div class="payment hidden">
 				<h3 class="font-primary font-product font-title hidden">Total: <span id="total" aria-live="polite"> kr</span></h3>
