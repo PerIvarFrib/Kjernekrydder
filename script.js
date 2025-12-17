@@ -196,52 +196,111 @@ window.addEventListener('popstate', function(event) {
 });
 
 // Product option functionality
-const optionButtons = document.querySelectorAll('.option-btn[role="radio"]');
-const radioGroup = document.querySelector('.purchase-options[role="radiogroup"]');
 const totalElement = document.getElementById('total');
 const shippingLine = document.getElementById('shipping-line');
 const vippsBtn = document.querySelector('#vipps-btn');
-// Immutable payment link map (test links for now)
-const PAYMENT_LINKS = Object.freeze({
-  1: 'https://betal.vipps.no/il7xjx',
-  4: 'https://betal.vipps.no/3v598p'
-});
-let currentUnits = null;
 const paymentSection = document.querySelector('.payment');
+const quantityDisplay = document.getElementById('quantity-display');
+const minusBtn = document.getElementById('quantity-minus');
+const plusBtn = document.getElementById('quantity-plus');
+// Adjustable inventory: single shared stock value (i antall glass)
+const AVAILABLE_INVENTORY = 0;
+// Praktisk øvre grense i UI for hvor mange glass som kan velges via Vipps
+const MAX_UNITS = 11;
 
-function updateSelection(newBtn){
-  optionButtons.forEach(btn=>{
-    const isTarget = btn === newBtn;
-    btn.setAttribute('aria-checked', isTarget ? 'true':'false');
-    if(isTarget){
-      btn.classList.add('selected');
-    } else {
-      btn.classList.remove('selected');
-    }
-  });
-}
+// Immutable map over Vipps-betalingslenker per antall glass.
+// Oppdater verdiene manuelt til riktige Vipps-salgslenker.
+// Nøkler (1-11) må matche antallsvelgeren i UI.
+const PAYMENT_LINKS = Object.freeze({
+  1: 'https://betal.vipps.no/a3pgo3',
+  2: 'https://betal.vipps.no/k1776q',
+  3: 'https://betal.vipps.no/y6twqp',
+  4: 'https://betal.vipps.no/1e1lza',
+  5: 'https://betal.vipps.no/rpqy9v',
+  6: 'https://betal.vipps.no/rezji9',
+  7: 'https://betal.vipps.no/jb6qqk',
+  8: 'https://betal.vipps.no/zypms9',
+  9: 'https://betal.vipps.no/4gld6t',
+  10: 'https://betal.vipps.no/39zp1y',
+});
 
-function computeTotals(btn){
-  const price = parseInt(btn.dataset.price,10);
-  const units = parseInt(btn.dataset.units,10);
-  currentUnits = units;
-  let total, shippingText;
-  if(units === 1){
-    const shipping = 58;
-    total = price + shipping;
-    shippingText = `Inkl. fraktkostnader (${shipping} kr)`;
-  } else {
-    total = price;
-    shippingText = 'Gratis frakt';
-  }
-  totalElement.textContent = `${total} kr`;
-  shippingLine.textContent = shippingText;
-  // Update Vipps link strictly from whitelist
-  if(PAYMENT_LINKS[units]){
-    vippsBtn.setAttribute('href', PAYMENT_LINKS[units]);
+let currentUnits = 1;
+let isSelectionInStock = false;
+
+function updateVippsLink() {
+  if (!vippsBtn) return;
+
+  const link = PAYMENT_LINKS[currentUnits];
+
+  if (isSelectionInStock && link) {
+    vippsBtn.setAttribute('href', link);
+    vippsBtn.classList.remove('hidden');
   } else {
     vippsBtn.removeAttribute('href');
+    vippsBtn.classList.add('hidden');
   }
+}
+
+function updateTotalsForQuantity(units){
+  currentUnits = units;
+
+  // Base price: 99 kr per glass
+  const goods = units * 99;
+
+  // Shipping rules
+  let shipping = 0;
+  if (units === 1) {
+    shipping = 58;
+  } else if (units >= 2 && units <= 4) {
+    shipping = 73;
+  } else if (units >= 5) {
+    shipping = 0;
+  }
+
+  const total = goods + shipping;
+
+  // Base shipping text
+  let shippingText;
+  if (shipping > 0) {
+    shippingText = `Inkl. fraktkostnader (${shipping} kr)`;
+  } else {
+    shippingText = 'Gratis frakt';
+  }
+
+  // Inventory check and user messaging
+  let message = '';
+  shippingLine.style.color = '';
+  shippingLine.style.fontSize = '';
+
+  if (AVAILABLE_INVENTORY <= 0) {
+    // Out of stock: block payment and inform clearly
+    isSelectionInStock = false;
+    shippingLine.style.color = '#FF1A33';
+    shippingLine.style.fontSize = '1rem';
+    message = 'Vi er utsolgt for jula. Kom gjerne tilbake i Januar.';
+  } else if (units > AVAILABLE_INVENTORY) {
+    // Requested quantity exceeds inventory: show how many are left
+    isSelectionInStock = false;
+    shippingLine.style.color = '#FF1A33';
+    shippingLine.style.fontSize = '1rem';
+    message += ` Vi har bare ${AVAILABLE_INVENTORY} glass igjen. Reduser antallet for å fortsette.`;
+  } else {
+    // Within inventory
+    isSelectionInStock = true;
+    // For larger orders above Vipps-grensen, ask customer to contact by email
+    if (currentUnits >= MAX_UNITS && currentUnits <= AVAILABLE_INVENTORY) {
+      isSelectionInStock = false;
+      shippingLine.style.color = '#FF1A33';
+      shippingLine.style.fontSize = '1rem';
+      message += ' For større bestillinger, ta kontakt på mail.';
+    }
+  }
+
+  totalElement.textContent = `${total} kr`;
+  shippingLine.textContent = message;
+
+  // Sørg for at Vipps-lenken alltid samsvarer med valgt antall og lagerstatus
+  updateVippsLink();
 }
 
 // Simplified: always show payment and scroll modal to bottom
@@ -249,53 +308,45 @@ function showPayment(){
   paymentSection.classList.remove('hidden');
   totalElement.parentElement.classList.remove('hidden');
   shippingLine.classList.remove('hidden');
-  vippsBtn.classList.remove('hidden');
-
-  const modalContent = document.querySelector('#product-modal .modal-content');
-  if(modalContent){
-    requestAnimationFrame(()=>{
-      if(modalContent.scrollTo){
-        modalContent.scrollTo({top: modalContent.scrollHeight, behavior: 'smooth'});
-      } else {
-        paymentSection.scrollIntoView({behavior: 'smooth', block: 'end'});
-      }
-    });
-  }
+  // Oppdater Vipps-lenken ved visning av betalingsseksjonen
+  updateVippsLink();
 }
 
-if (optionButtons.length) {
-  optionButtons.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      updateSelection(btn);
-      computeTotals(btn);
-      showPayment();
-    });
-    btn.addEventListener('keydown', e=>{
-      if(['ArrowRight','ArrowDown'].includes(e.key)){
-        e.preventDefault();
-        const idx = Array.from(optionButtons).indexOf(btn);
-        const next = optionButtons[(idx+1)%optionButtons.length];
-        next.focus();
-        next.click();
-      } else if(['ArrowLeft','ArrowUp'].includes(e.key)){
-        e.preventDefault();
-        const idx = Array.from(optionButtons).indexOf(btn);
-        const prev = optionButtons[(idx - 1 + optionButtons.length)%optionButtons.length];
-        prev.focus();
-        prev.click();
-      }
-    });
+// Quantity control: +/- buttons around a readable span
+if (quantityDisplay && minusBtn && plusBtn) {
+  // Initialise display
+  quantityDisplay.textContent = String(currentUnits);
+
+  minusBtn.addEventListener('click', () => {
+    currentUnits = Math.max(1, currentUnits - 1);
+    quantityDisplay.textContent = String(currentUnits);
+    updateTotalsForQuantity(currentUnits);
+    showPayment();
   });
 
-  // Remove old aria-pressed logic remnants if any (defensive)
-  optionButtons.forEach(b=> b.removeAttribute('aria-pressed'));
+  plusBtn.addEventListener('click', () => {
+    currentUnits = Math.min(MAX_UNITS, currentUnits + 1);
+    quantityDisplay.textContent = String(currentUnits);
+    updateTotalsForQuantity(currentUnits);
+    showPayment();
+  });
+}
+
+// Vis betalingsseksjonen med utgangspunkt i 1 glass som standard
+if (totalElement && shippingLine && paymentSection) {
+  updateTotalsForQuantity(currentUnits);
+  showPayment();
 }
 
 // Guard against tampering: ensure link matches whitelist before navigation
 if (vippsBtn) {
   vippsBtn.addEventListener('click', (e)=>{
     const href = vippsBtn.getAttribute('href');
-    if(!currentUnits || !href || PAYMENT_LINKS[currentUnits] !== href){
+    const expectedHref = PAYMENT_LINKS[currentUnits];
+
+    // Stopp hvis: ingen antall, ingen href, ikke på lager,
+    // ingen forventet lenke for dette antallet, eller href er endret.
+    if(!currentUnits || !href || !isSelectionInStock || !expectedHref || href !== expectedHref){
       e.preventDefault();
       return false;
     }

@@ -192,37 +192,6 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     background-color: rgba(237, 244, 248, 0.1);
 }
 
-.menu-product-btn {
-    background: var(--brown);
-    color: var(--white);
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-}
-
-.menu-product-btn:hover, .menu-product-btn:focus {
-    background: var(--orange);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(195, 83, 9, 0.3);
-}
-
-.menu-product-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(195, 83, 9, 0.3);
-}
-
-.menu-product-btn svg {
-    width: 22px;
-    height: 22px;
-}
-
 /* Removed rem-based mobile button sizing to keep original pixel layout */
 
 /* Responsive navigation improvements */
@@ -437,6 +406,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 
 /* Compelling Product Button */
 .product-btn {
+    --btn-size: 1;
     background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
     color: var(--black);
     border: none;
@@ -453,7 +423,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     box-shadow: 
         0 8px 25px rgba(195, 83, 9, 0.3),
         0 4px 10px rgba(0, 0, 0, 0.2);
-    transform: translateY(0);
+    transform: translateY(0) scale(var(--btn-size));
 }
 
 .product-btn::before {
@@ -468,7 +438,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 }
 
 .product-btn:hover {
-    transform: translateY(-3px);
+    transform: translateY(-3px) scale(var(--btn-size));
     box-shadow: 
         0 12px 35px rgba(195, 83, 9, 0.4),
         0 6px 15px rgba(0, 0, 0, 0.3);
@@ -480,7 +450,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 }
 
 .product-btn:active {
-    transform: translateY(-1px);
+    transform: translateY(-1px) scale(var(--btn-size));
     box-shadow: 
         0 6px 20px rgba(195, 83, 9, 0.3),
         0 3px 8px rgba(0, 0, 0, 0.2);
@@ -489,6 +459,9 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 .product-btn:focus {
     outline: 3px solid rgba(243, 167, 3, 0.5);
     outline-offset: 2px;
+}
+.menu-product-btn {
+    --btn-size: 0.8;
 }
 .blank{
     background-color: transparent;
@@ -574,14 +547,14 @@ footer a:hover, header a:hover, footer a:focus, a:active{
 }
 
 .purchase-options {
-  background: var(--vipps-svart);
-  display: flex;
-  flex-direction: row;
-  gap:1px;
-  object-fit:cover;
-  justify-content: center;
-  width:100%;
-  box-shadow: 0 -1px 2px var(--black-shade);
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* gap: 0.5rem; */
+    padding: 0.6rem 0.8rem;
+    /* width:100%; */
+    /* box-shadow: 0 -1px 2px var(--black-shade); */
 }
 .option-btn {
     width: 100%;
@@ -656,6 +629,37 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     font-weight: bold;
     opacity: 0.8;
 }
+.purchase-options span.font-product {
+    /* margin-right: 0.25rem; */
+    color: var(--white);
+    background-color: var(--white);
+    font-size: 1rem;
+}
+
+#quantity-display {
+    display: inline-block;
+    min-width: 2.5rem;
+    padding: 0.2rem 0.8rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--black);
+}
+
+.purchase-options .option-btn {
+    width: auto;
+    max-width: none;
+    padding: 0.77rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.purchase-options .option-btn:hover,
+.purchase-options .option-btn:focus {
+    transform: none;
+    box-shadow: 0 0 0 1px rgba(237, 244, 248, 0.5);
+}
 .price-note {
   font-size: 0.9rem;
   color: var(--brown);
@@ -687,7 +691,7 @@ footer a:hover, header a:hover, footer a:focus, a:active{
         font-size:1rem;
         margin: 1rem auto;
         width: 60%;
-        background-color: var(--vipps-svart)
+        background-color: var(--vipps-hvit)
 }
 .vipps-btn img{
     width:auto;
