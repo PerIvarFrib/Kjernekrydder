@@ -277,7 +277,7 @@ function updateTotalsForQuantity(units){
     isSelectionInStock = false;
     shippingLine.style.color = '#FF1A33';
     shippingLine.style.fontSize = '1rem';
-    message = 'Vi er utsolgt for jula. Kom gjerne tilbake i Januar.';
+    message = 'Vi er for tiden utsolgt. Kom gjerne tilbake senere.';
   } else if (units > AVAILABLE_INVENTORY) {
     // Requested quantity exceeds inventory: show how many are left
     isSelectionInStock = false;
