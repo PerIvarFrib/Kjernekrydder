@@ -224,7 +224,7 @@ const PAYMENT_LINKS = Object.freeze({
   10: 'https://betal.vipps.no/39zp1y',
 });
 
-let currentUnits = 1;
+let currentUnits = 13;
 let isSelectionInStock = false;
 
 function updateVippsLink() {
