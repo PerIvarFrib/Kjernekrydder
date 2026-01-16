@@ -204,7 +204,7 @@ const quantityDisplay = document.getElementById('quantity-display');
 const minusBtn = document.getElementById('quantity-minus');
 const plusBtn = document.getElementById('quantity-plus');
 // Adjustable inventory: single shared stock value (i antall glass)
-const AVAILABLE_INVENTORY = 0;
+const AVAILABLE_INVENTORY = 13;
 // Praktisk øvre grense i UI for hvor mange glass som kan velges via Vipps
 const MAX_UNITS = 11;
 
@@ -224,7 +224,7 @@ const PAYMENT_LINKS = Object.freeze({
   10: 'https://betal.vipps.no/39zp1y',
 });
 
-let currentUnits = 13;
+let currentUnits = 1;
 let isSelectionInStock = false;
 
 function updateVippsLink() {
