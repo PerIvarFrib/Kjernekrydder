@@ -198,6 +198,9 @@ window.addEventListener('popstate', function(event) {
 // Product option functionality
 const totalElement = document.getElementById('total');
 const shippingLine = document.getElementById('shipping-line');
+const goodsElement = document.getElementById('goods-price');
+const shippingPriceElement = document.getElementById('shipping-price');
+const priceBreakdown = document.getElementById('price-breakdown');
 const vippsBtn = document.querySelector('#vipps-btn');
 const paymentSection = document.querySelector('.payment');
 const quantityDisplay = document.getElementById('quantity-display');
@@ -259,13 +262,8 @@ function updateTotalsForQuantity(units){
 
   const total = goods + shipping;
 
-  // Base shipping text
-  let shippingText;
-  if (shipping > 0) {
-    shippingText = `Inkl. fraktkostnader (${shipping} kr)`;
-  } else {
-    shippingText = 'Gratis frakt';
-  }
+  if (goodsElement) goodsElement.textContent = `${goods} kr`;
+  if (shippingPriceElement) shippingPriceElement.textContent = shipping > 0 ? `${shipping} kr` : 'Gratis';
 
   // Inventory check and user messaging
   let message = '';
@@ -306,7 +304,7 @@ function updateTotalsForQuantity(units){
 // Simplified: always show payment and scroll modal to bottom
 function showPayment(){
   paymentSection.classList.remove('hidden');
-  totalElement.parentElement.classList.remove('hidden');
+  if (priceBreakdown) priceBreakdown.classList.remove('hidden');
   shippingLine.classList.remove('hidden');
   // Oppdater Vipps-lenken ved visning av betalingsseksjonen
   updateVippsLink();

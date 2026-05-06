@@ -9,7 +9,7 @@
 	<link rel="icon" href="media/favicon.webp" />
 	<link rel="stylesheet" href="styles.min.css?v=1.0">
 	<link rel="stylesheet" href="recipes.min.css?v=1.0">
-	<script src="script.min.js?v=1.0" defer></script>
+	<script src="script.min.js?v=1.1" defer></script>
 	<script src="recipes.min.js?v=1.0" defer></script>
 </head>
 <body class="recipe-page">
@@ -66,10 +66,11 @@
 				<source srcset="media/kjernekrydder.webp" type="image/webp" />
 				<img id="product-img" src="media/kjernekrydder.webp" alt="Glass med Kjernekrydder – nykvernet krydderblanding" loading="eager" decoding="async" />
 			</picture>
-			<h2 id="product-title" class="font-primary font-product font-title">Kjernekrydder 40g</h2>
+			<h2 id="product-title" class="font-primary font-product font-title">Kjernekrydder</h2>
 			<p id="produktbeskrivelse" class="font-primary font-product">
 				Ingredienser: kanel, nellik, svart pepper,
-				svart kardemomme og r&oslash;d sichuan pepper.
+				svart kardemomme og r&oslash;d sichuan pepper.<br>
+				Nettovekt: 40 gram
 			</p>
 			<h3 class="font-primary font-product font-title purchase-heading">Velg antall:</h3>
 			<div class="purchase-options" aria-label="Velg antall glass">
@@ -79,8 +80,12 @@
 				<button id="quantity-plus" class="option-btn font-primary font-hero" type="button" aria-label="Flere glass">+</button>
 			</div>
 			<div class="payment hidden">
-				<h3 class="font-primary font-product font-title hidden">Total: <span id="total" aria-live="polite"> kr</span></h3>
-				<div class="font-primary font-product font-discrete hidden" id="shipping-line" role="status" aria-live="polite">Inkl. fraktkostnader (<span id="shipping-cost">58</span> kr)</div>
+				<div class="price-breakdown hidden" id="price-breakdown">
+					<div class="price-row font-primary font-product"><span>Glass med krydder</span><span id="goods-price" aria-live="polite"></span></div>
+					<div class="price-row font-primary font-product"><span>Frakt</span><span id="shipping-price" aria-live="polite"></span></div>
+					<div class="price-row price-row--total font-primary font-product font-title"><span>Totalt</span><span id="total" aria-live="polite"></span></div>
+				</div>
+				<div class="font-primary font-product font-discrete hidden" id="shipping-line" role="status" aria-live="polite"></div>
 				<a id="vipps-btn" class="vipps-btn hidden" href="#" role="button" rel="noopener noreferrer" target="_blank"><img src="media/Vipps_logo.svg" alt="Vipps" />Bestill med Vipps</a>
 				<p class="font-primary font-product">Ved &aring; fullf&oslash;re kj&oslash;pet aksepterer du v&aring;re <a href="salgsbetingelser.html">salgsbetingelser</a>.</p>
 			</div>
