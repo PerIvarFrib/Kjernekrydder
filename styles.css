@@ -660,6 +660,23 @@ footer a:hover, header a:hover, footer a:focus, a:active{
     background-color: var(--white);
     padding-bottom: 1.6rem;
 }
+.price-breakdown{
+    margin: 0.5rem 1.4rem 0.2rem;
+    border-top: 1px solid var(--black);
+    padding-top: 0.4rem;
+}
+.price-row{
+    display: flex;
+    justify-content: space-between;
+    padding: 0.1rem 0;
+    font-size: 1rem;
+}
+.price-row--total{
+    border-top: 1px solid var(--black);
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+    font-size: 1.1rem;
+}
 .vipps-btn{
         color:var(--vipps-oransje);
         padding:0.4rem 0.6rem 0.4rem 0.6rem;
